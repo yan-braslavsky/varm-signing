@@ -63,4 +63,24 @@ describe('Logger', () => {
     expect(console.info).toHaveBeenCalled();
     expect(console.table).not.toHaveBeenCalled();
   });
+  
+  it('inspects data with the inspectData method', () => {
+    vi.spyOn(console, 'group').mockImplementation(() => {});
+    vi.spyOn(console, 'groupEnd').mockImplementation(() => {});
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    
+    // Object inspection
+    const testObject = { name: 'Test', value: 123 };
+    Logger.inspectData(testObject, 'Test Object');
+    expect(console.group).toHaveBeenCalledWith('Test Object');
+    expect(console.log).toHaveBeenCalled();
+    expect(console.groupEnd).toHaveBeenCalled();
+    
+    // Array inspection
+    const testArray = [{ id: 1 }, { id: 2 }];
+    Logger.inspectData(testArray, 'Test Array');
+    expect(console.group).toHaveBeenCalledWith('Test Array');
+    expect(console.log).toHaveBeenCalledWith('Array of 2 items');
+    expect(console.groupEnd).toHaveBeenCalled();
+  });
 });

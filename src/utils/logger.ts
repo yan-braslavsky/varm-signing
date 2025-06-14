@@ -90,6 +90,36 @@ class Logger {
       console.info(data);
     }
   }
+  
+  // Special method to deeply log object properties
+  static inspectData(data: unknown, label: string = 'Data Inspection'): void {
+    if (!this.isProduction) {
+      console.group(label);
+      
+      if (Array.isArray(data)) {
+        console.log(`Array of ${data.length} items`);
+        data.forEach((item, index) => {
+          console.group(`Item ${index}:`);
+          if (typeof item === 'object' && item !== null) {
+            Object.entries(item).forEach(([key, value]) => {
+              console.log(`${key}: ${value} (${typeof value})`);
+            });
+          } else {
+            console.log(item);
+          }
+          console.groupEnd();
+        });
+      } else if (typeof data === 'object' && data !== null) {
+        Object.entries(data).forEach(([key, value]) => {
+          console.log(`${key}: ${value} (${typeof value})`);
+        });
+      } else {
+        console.log(data);
+      }
+      
+      console.groupEnd();
+    }
+  }
 }
 
 export { Logger };

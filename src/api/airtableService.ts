@@ -23,13 +23,38 @@ const getAirtableHeaders = () => ({
 
 // Helper function to transform Airtable record to Offer
 const transformAirtableRecord = (record: any): Offer => {
-  const fields = record.fields;
+  const fields = record.fields || {};
+  
+  // Convert offerAmount to a proper number if it exists
+  let offerAmount = 0;
+  if (fields.offerAmount !== undefined) {
+    if (typeof fields.offerAmount === 'string') {
+      offerAmount = parseFloat(fields.offerAmount) || 0;
+    } else if (typeof fields.offerAmount === 'number') {
+      offerAmount = fields.offerAmount;
+    }
+  }
+  
+  // Debug logging in development
+  if (import.meta.env.MODE !== 'production') {
+    console.group('Airtable Record Transformation');
+    console.log('Record ID:', record.id);
+    console.log('Raw fields:', fields);
+    console.log('Field types:', {
+      slug: typeof fields.slug,
+      customerName: typeof fields.customerName,
+      offerAmount: typeof fields.offerAmount,
+      pdfUrl: typeof fields.pdfUrl
+    });
+    console.groupEnd();
+  }
+
   return {
-    slug: fields.slug,
-    customerName: fields.customerName,
-    offerAmount: fields.offerAmount,
-    pdfUrl: fields.pdfUrl,
-    isSigned: fields.isSigned || false,
+    slug: fields.slug || `record-${record.id || 'unknown'}`,
+    customerName: fields.customerName || 'Unnamed Customer',
+    offerAmount: offerAmount,
+    pdfUrl: fields.pdfUrl || '',
+    isSigned: Boolean(fields.isSigned),
     signedAt: fields.signedAt,
   };
 };
@@ -194,7 +219,21 @@ export const airtableService = {
       }
 
       const data = await response.json();
-      const offers = data.records.map(transformAirtableRecord);
+      
+      // Debug logging for the raw API response
+      if (import.meta.env.MODE !== 'production') {
+        console.group('Airtable API Raw Response');
+        console.log('Status:', response.status);
+        console.log('Records count:', data.records?.length || 0);
+        if (data.records?.length > 0) {
+          console.log('First record sample:', data.records[0]);
+        }
+        console.groupEnd();
+      }
+      
+      // Ensure data.records is an array before mapping
+      const records = Array.isArray(data.records) ? data.records : [];
+      const offers = records.map(transformAirtableRecord);
 
       return {
         data: offers,

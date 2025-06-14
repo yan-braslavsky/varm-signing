@@ -8,6 +8,8 @@
 - Added error retry functionality in DemoPage with visual feedback
 - Added empty state handling when no offers are available
 - Added better error handling with user-friendly error messages
+- Added data inspection logging utility for better debugging
+- Added robust data fallback mechanism to handle incomplete data from API
 
 ### Changed
 - Enhanced API calls with structured logging to track request/response cycles
@@ -21,3 +23,5 @@
 - Fixed React key prop warning in DemoPage component by correcting Tailwind CSS class names (changed `lg-grid-cols-2` to `lg:grid-cols-2` and `hover:scale-102` to `hover:scale-105`).
 - Improved key prop uniqueness in DemoPage component by adding more specific prefixes to list keys (changed numeric keys to `skeleton-${i}` and slug keys to `offer-${offer.slug}`).
 - Fixed duplicate key error in DemoPage component by adding fallback to index when offer.slug is undefined and adding visual indicators for offers with missing slugs.
+- Fixed TypeScript environment variable reference by using Vite's `import.meta.env` instead of Node's `process.env`.
+- Fixed offers not displaying due to overly strict data validation by adding fallbacks for missing fields and a recovery mechanism.

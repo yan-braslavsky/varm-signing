@@ -42,18 +42,33 @@ export const DemoPage: React.FC = () => {
             context: 'DemoPage.fetchOffers' 
           });
           
-          // Data validation - ensure all required fields are present
+          // Log detailed information about each offer for debugging
+          if (retryCounter === 0) { // Only on first load to avoid excessive logging
+            Logger.inspectData(response.data, 'Offer Data Before Validation');
+          }
+          
+          // Data validation - ensure all required fields are present with more detailed logging
           const validOffers = response.data.filter(offer => {
-            const isValid = Boolean(
-              offer.slug && 
-              offer.customerName && 
-              typeof offer.offerAmount === 'number'
-            );
+            // Check for individual properties
+            const hasSlug = Boolean(offer.slug); 
+            const hasName = Boolean(offer.customerName);
+            const hasValidAmount = !isNaN(offer.offerAmount) && offer.offerAmount !== null;
+            
+            const isValid = hasSlug && hasName && hasValidAmount;
             
             if (!isValid) {
               Logger.warn('Found invalid offer data', { 
                 context: 'DemoPage.fetchOffers',
-                data: offer
+                data: {
+                  offer,
+                  validationResults: {
+                    hasSlug,
+                    hasName,
+                    hasValidAmount,
+                    offerAmountType: typeof offer.offerAmount,
+                    offerAmountValue: offer.offerAmount
+                  }
+                }
               });
             }
             
@@ -64,6 +79,16 @@ export const DemoPage: React.FC = () => {
             Logger.warn(`Filtered out ${response.data.length - validOffers.length} invalid offers`, {
               context: 'DemoPage.fetchOffers'
             });
+            
+            if (validOffers.length === 0) {
+              Logger.warn('All offers were filtered out due to validation. Using original data with warnings.', { 
+                context: 'DemoPage.fetchOffers' 
+              });
+              // If all offers are invalid, use the original data with warnings
+              // This is a fallback to ensure users see something rather than nothing
+              setOffers(response.data);
+              return;
+            }
           }
           
           setOffers(validOffers);
