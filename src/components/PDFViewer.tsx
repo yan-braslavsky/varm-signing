@@ -1,4 +1,5 @@
 import React from 'react';
+import { processPdfUrl } from '../utils/firebaseStorage';
 
 interface PDFViewerProps {
   url: string;
@@ -8,6 +9,9 @@ interface PDFViewerProps {
 export const PDFViewer: React.FC<PDFViewerProps> = ({ url, className = '' }) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [hasError, setHasError] = React.useState(false);
+
+  // Process the URL to handle Firebase Storage gs:// URLs
+  const processedUrl = React.useMemo(() => processPdfUrl(url), [url]);
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -19,7 +23,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ url, className = '' }) => 
     setHasError(true);
   };
 
-  if (!url || url.trim() === '') {
+  if (!processedUrl || processedUrl.trim() === '') {
     return (
       <div className={`bg-white rounded-xl shadow-md p-4 ${className}`}>
         <h2 className="text-lg font-semibold mb-3 text-gray-900">Offer Document</h2>
@@ -53,7 +57,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ url, className = '' }) => 
             Please check your connection or try again later
           </p>
           <a 
-            href={url} 
+            href={processedUrl} 
             target="_blank" 
             rel="noopener noreferrer" 
             className="inline-block mt-3 text-blue-600 hover:text-blue-800 underline text-sm"
@@ -65,7 +69,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ url, className = '' }) => 
 
       <div className={`${isLoading || hasError ? 'hidden' : 'block'}`}>
         <iframe
-          src={url}
+          src={processedUrl}
           title="Offer PDF"
           className="w-full h-[600px] border rounded-md"
           onLoad={handleLoad}
@@ -75,7 +79,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ url, className = '' }) => 
         {/* Download link */}
         <div className="mt-3 text-center">
           <a 
-            href={url} 
+            href={processedUrl} 
             target="_blank" 
             rel="noopener noreferrer" 
             className="text-blue-600 hover:text-blue-800 underline text-sm"

@@ -47,6 +47,7 @@ describe('Airtable Field Mapping', () => {
       customerName: 'John Doe',
       customerEmail: 'john@example.com',
       offerAmount: 150000,
+      documentURL: 'https://example.com/doc.pdf',
       pdfUrl: 'https://example.com/doc.pdf',
       isSigned: false,
       signedAt: undefined
@@ -77,6 +78,7 @@ describe('Airtable Field Mapping', () => {
       customerName: 'Jane Smith',
       customerEmail: 'jane@example.com',
       offerAmount: 250000,
+      documentURL: 'https://example.com/doc2.pdf',
       pdfUrl: 'https://example.com/doc2.pdf',
       isSigned: true,
       signedAt: '2025-06-14T10:00:00Z'
@@ -102,6 +104,7 @@ describe('Airtable Field Mapping', () => {
       customerName: 'Unnamed Customer',
       customerEmail: '',
       offerAmount: 0,
+      documentURL: '',
       pdfUrl: '',
       isSigned: false,
       signedAt: undefined

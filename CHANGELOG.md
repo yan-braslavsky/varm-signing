@@ -12,8 +12,18 @@
   - Updated SignPage layout to use side-by-side grid layout on larger screens
   - Added support for both `documentURL` and `pdfUrl` fields for backward compatibility
   - Comprehensive test coverage for PDF viewer functionality
+- **Firebase Storage URL Support**: Added automatic conversion of Firebase Storage gs:// URLs
+  - Created `firebaseStorage.ts` utility module for URL conversion
+  - Automatically converts gs:// URLs to downloadable HTTPS URLs using Firebase Storage REST API
+  - Integrated URL processing in PDFViewer component and Airtable service
+  - Added comprehensive test coverage for Firebase Storage URL utilities
+  - Handles edge cases like malformed URLs, special characters, and nested folder paths
 
 ### Fixed
+- **CRITICAL FIX**: Resolved Firebase Storage PDF loading issue
+  - Fixed "Failed to launch 'gs://...' because the scheme does not have a registered handler" error
+  - PDFs stored in Firebase Storage with gs:// URLs now convert automatically to browser-compatible URLs
+  - Format: `gs://bucket/path/file.pdf` → `https://firebasestorage.googleapis.com/v0/b/bucket/o/path%2Ffile.pdf?alt=media`
 - **CRITICAL FIX**: Resolved Airtable API 422 errors when fetching offers
   - Updated filter formula to use correct Airtable field names ("Slug" instead of "slug")
   - Fixed field mapping configuration to match actual Airtable schema structure

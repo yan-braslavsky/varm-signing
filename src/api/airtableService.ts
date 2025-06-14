@@ -7,6 +7,7 @@
 
 import type { Offer, ApiResponse } from '../types/offer.js';
 import { FIELD_VARIATIONS } from '../types/schema.js';
+import { processPdfUrl } from '../utils/firebaseStorage.js';
 
 // Airtable configuration
 const AIRTABLE_CONFIG = {
@@ -83,7 +84,10 @@ const transformAirtableRecord = (record: any): Offer => {
   const customerEmail = getFieldValue(fieldMap.customerEmail) || '';
   
   // Get PDF URL with fallback (documentURL in schema)
-  const pdfUrl = getFieldValue(fieldMap.pdfUrl) || '';
+  const rawPdfUrl = getFieldValue(fieldMap.pdfUrl) || '';
+  
+  // Process PDF URL to handle Firebase Storage gs:// URLs
+  const pdfUrl = processPdfUrl(rawPdfUrl);
   
   // Convert signed status to boolean (signed in schema)
   const signedStatus = getFieldValue(fieldMap.isSigned);

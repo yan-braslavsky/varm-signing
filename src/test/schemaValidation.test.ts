@@ -175,6 +175,7 @@ describe('Schema Validation', () => {
       customerName: 'Unnamed Customer', // Should use fallback name
       customerEmail: '', // Should use empty string as fallback
       offerAmount: 0, // Should use fallback amount
+      documentURL: '', // Should use empty string as fallback
       pdfUrl: '', // Should use empty string as fallback
       isSigned: false, // Should use fallback signed status
       signedAt: undefined
