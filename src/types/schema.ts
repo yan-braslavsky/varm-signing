@@ -69,13 +69,14 @@ export const FIELD_MAPPING = {
 /**
  * Airtable field name variations
  * These are acceptable alternative field names for each app field
+ * Updated based on actual Airtable schema: Name, Email, Offer Amount, Document URL, Signed, Signed At, Slug
  */
 export const FIELD_VARIATIONS = {
-  slug: ['slug', 'Slug', 'id', 'ID', 'Id'],
-  customerName: ['name', 'Name', 'customerName', 'Customer Name'],
-  customerEmail: ['email', 'Email', 'customerEmail', 'Customer Email'],
-  offerAmount: ['offerAmount', 'Offer Amount', 'Amount', 'Value'],
-  pdfUrl: ['documentURL', 'DocumentURL', 'Document URL', 'pdfUrl', 'PDF URL'],
-  isSigned: ['signed', 'Signed', 'isSigned', 'Is Signed'],
-  signedAt: ['signedAt', 'Signed At', 'Sign Date', 'Date Signed']
+  slug: ['Slug', 'slug', 'id', 'ID', 'Id'],
+  customerName: ['Name', 'name', 'customerName', 'Customer Name'],
+  customerEmail: ['Email', 'email', 'customerEmail', 'Customer Email'],
+  offerAmount: ['Offer Amount', 'offerAmount', 'Amount', 'Value'],
+  pdfUrl: ['Document URL', 'documentURL', 'DocumentURL', 'pdfUrl', 'PDF URL'],
+  isSigned: ['Signed', 'signed', 'isSigned', 'Is Signed'],
+  signedAt: ['Signed At', 'signedAt', 'Sign Date', 'Date Signed']
 };

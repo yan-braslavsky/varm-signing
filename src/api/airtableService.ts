@@ -146,21 +146,30 @@ export const airtableService = {
 
       const url = `${AIRTABLE_CONFIG.baseUrl}/${AIRTABLE_CONFIG.baseId}/${AIRTABLE_CONFIG.tableName}`;
       
-      // Try both 'slug' and 'id' fields according to schema
-      const filterFormula = `OR({slug} = "${slug}", {id} = "${slug}")`;
+      // First, let's try a simpler filter to avoid 422 errors
+      // Use the actual field name from Airtable: "Slug"
+      const filterFormula = `{Slug} = "${slug}"`;
       
       const response = await fetch(`${url}?filterByFormula=${encodeURIComponent(filterFormula)}`, {
         headers: getAirtableHeaders(),
       });
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Airtable API error ${response.status}:`, errorText);
+        
         if (response.status === 404) {
           return {
             error: 'Offer not found',
             status: 404,
           };
         }
-        throw new Error(`Airtable API error: ${response.status}`);
+        if (response.status === 422) {
+          console.error('Airtable 422 error - trying alternative approach');
+          // Try without filter formula, just get all records and filter client-side
+          return await this.getOfferAlternative(slug);
+        }
+        throw new Error(`Airtable API error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
@@ -181,6 +190,66 @@ export const airtableService = {
 
     } catch (error) {
       console.error('Airtable getOffer error:', error);
+      return {
+        error: error instanceof Error ? error.message : 'Failed to fetch offer',
+        status: 500,
+      };
+    }
+  },
+
+  /**
+   * Alternative method to fetch offer without filter formula (fallback for 422 errors)
+   */
+  async getOfferAlternative(slug: string): Promise<ApiResponse<Offer>> {
+    try {
+      validateConfig();
+
+      const url = `${AIRTABLE_CONFIG.baseUrl}/${AIRTABLE_CONFIG.baseId}/${AIRTABLE_CONFIG.tableName}`;
+      
+      // Get all records and filter client-side
+      const response = await fetch(url, {
+        headers: getAirtableHeaders(),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Airtable API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (!data.records || data.records.length === 0) {
+        return {
+          error: 'No offers found',
+          status: 404,
+        };
+      }
+
+      // Filter records client-side using actual Airtable field names
+      const matchingRecord = data.records.find((record: any) => {
+        const fields = record.fields || {};
+        return fields.Slug === slug || 
+               fields.slug === slug || 
+               fields.ID === slug || 
+               fields.id === slug || 
+               fields.Id === slug;
+      });
+
+      if (!matchingRecord) {
+        return {
+          error: 'This offer link is invalid or has expired',
+          status: 404,
+        };
+      }
+
+      const offer = transformAirtableRecord(matchingRecord);
+      
+      return {
+        data: offer,
+        status: 200,
+      };
+
+    } catch (error) {
+      console.error('Airtable getOfferAlternative error:', error);
       return {
         error: error instanceof Error ? error.message : 'Failed to fetch offer',
         status: 500,
@@ -212,8 +281,8 @@ export const airtableService = {
       // Find the record ID by querying Airtable
       const url = `${AIRTABLE_CONFIG.baseUrl}/${AIRTABLE_CONFIG.baseId}/${AIRTABLE_CONFIG.tableName}`;
       
-      // Try both 'slug' and 'id' fields according to schema
-      const filterFormula = `OR({slug} = "${slug}", {id} = "${slug}")`;
+      // Use the correct field name for filtering
+      const filterFormula = `{Slug} = "${slug}"`;
       
       const findResponse = await fetch(`${url}?filterByFormula=${encodeURIComponent(filterFormula)}`, {
         headers: getAirtableHeaders(),
@@ -237,37 +306,18 @@ export const airtableService = {
       const updateUrl = `${url}/${recordId}`;
       
       // Determine which field names to use for the update
-      // Based on the JSON schema provided, the field should be named 'signed' and 'signedAt'
+      // Based on actual Airtable structure: "Signed" and "Signed At"
       const findFields = findData.records[0].fields;
       
-      // Use field names according to schema: 'signed' and 'signedAt'
-      // But still check for alternatives if they don't exist
-      const hasSignedField = 'signed' in findFields;
-      const hasIsSignedField = 'isSigned' in findFields;
-      const hasSignedAtField = 'signedAt' in findFields;
-      
-      // Create update data based on the schema
+      // Create update data using actual Airtable field names
       const fields: Record<string, any> = {};
       
-      // For signed field (preferred according to schema)
-      const nowISOString = new Date().toISOString();
+      // For signed field - use "Signed" (the actual field name in Airtable)
+      const nowDateString = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
       
-      if (hasSignedField) {
-        fields.signed = true;
-      } else if (hasIsSignedField) {
-        fields.isSigned = true;
-      } else {
-        // If neither field exists, use the schema field name
-        fields.signed = true;
-      }
-      
-      // For signedAt field
-      if (hasSignedAtField) {
-        fields.signedAt = nowISOString;
-      } else {
-        // Use the schema field name
-        fields.signedAt = nowISOString;
-      }
+      // Use the actual field names from Airtable
+      fields['Signed'] = true;
+      fields['Signed At'] = nowDateString;
       
       // Debug logging in development
       if (import.meta.env.MODE !== 'production') {

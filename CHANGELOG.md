@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased - 2025-06-14
+
+### Fixed
+- **CRITICAL FIX**: Resolved Airtable API 422 errors when fetching offers
+  - Updated filter formula to use correct Airtable field names ("Slug" instead of "slug")
+  - Fixed field mapping configuration to match actual Airtable schema structure
+  - Added fallback method for Airtable queries that use client-side filtering
+  - Updated field name priority to use actual Airtable field names: "Name", "Email", "Offer Amount", "Document URL", "Signed", "Signed At", "Slug"
+  - Enhanced error handling with detailed logging for better debugging
+  - Added debug scripts to validate Airtable connection and data structure
+
+### Added
+- Created debug scripts (`scripts/debug-airtable.js`, `scripts/test-filter.js`) for troubleshooting Airtable integration
+- Added comprehensive error logging for Airtable API responses
+- Added alternative offer fetching method as fallback for filter formula issues
+
 ## v1.2.0 - 2025-06-14
 
 ### Added
