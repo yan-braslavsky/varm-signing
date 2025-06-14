@@ -49,25 +49,50 @@ export const OffersPage: React.FC = () => {
           
           // Data validation - ensure all required fields are present with more detailed logging
           const validOffers = response.data.filter(offer => {
-            // Check for individual properties
+            // Check for individual properties based on schema requirements
             const hasSlug = Boolean(offer.slug); 
             const hasName = Boolean(offer.customerName);
             const hasValidAmount = !isNaN(offer.offerAmount) && offer.offerAmount !== null;
+            const hasValidPdfUrl = Boolean(offer.pdfUrl);
             
-            const isValid = hasSlug && hasName && hasValidAmount;
+            // Email is optional in our app but required in the schema
+            const hasEmail = Boolean(offer.customerEmail);
+            
+            // Core requirements for displaying an offer card
+            const isValid = hasSlug && hasName && hasValidAmount && hasValidPdfUrl;
             
             if (!isValid) {
-              Logger.warn('Found invalid offer data', { 
+              // Create a more detailed validation report
+              const missingFields = [];
+              if (!hasSlug) missingFields.push('slug/id');
+              if (!hasName) missingFields.push('name/customerName');
+              if (!hasEmail) missingFields.push('email/customerEmail');
+              if (!hasValidAmount) missingFields.push('offerAmount');
+              if (!hasValidPdfUrl) missingFields.push('documentURL/pdfUrl');
+              
+              Logger.warn(`Found invalid offer data - missing required fields: ${missingFields.join(', ')}`, { 
                 context: 'OffersPage.fetchOffers',
                 data: {
-                  offer,
+                  offerId: offer.slug || 'unknown',
+                  customerName: offer.customerName || 'unnamed',
                   validationResults: {
                     hasSlug,
                     hasName,
+                    hasEmail,
                     hasValidAmount,
+                    hasValidPdfUrl,
                     offerAmountType: typeof offer.offerAmount,
                     offerAmountValue: offer.offerAmount
                   }
+                }
+              });
+            } else if (!hasEmail) {
+              // Valid for display but missing email which is required in schema
+              Logger.warn('Offer is missing email but otherwise valid', {
+                context: 'OffersPage.fetchOffers',
+                data: { 
+                  slug: offer.slug,
+                  customerName: offer.customerName
                 }
               });
             }
@@ -208,6 +233,9 @@ export const OffersPage: React.FC = () => {
                     <h3 className="text-lg font-semibold text-gray-900">
                       {offer.customerName}
                     </h3>
+                    {offer.customerEmail && (
+                      <p className="text-sm text-gray-500">{offer.customerEmail}</p>
+                    )}
                     <p className="text-sm text-gray-600">Slug: {offer.slug || 'Missing'}</p>
                   </div>
                 </div>

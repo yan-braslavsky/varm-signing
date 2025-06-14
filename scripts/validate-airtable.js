@@ -17,6 +17,12 @@
 // Load environment variables from .env file
 require('dotenv').config();
 
+// Email validation helper function
+function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 // Get Airtable credentials from environment variables
 const baseId = process.env.VITE_AIRTABLE_BASE_ID;
 const apiKey = process.env.VITE_AIRTABLE_API_KEY;
@@ -76,13 +82,16 @@ async function validateAirtable() {
     
     console.log('📊 Table structure:');
     
-    // Define required fields with possible naming variations
+    // Define required fields with possible naming variations based on schema.ts
+    // This should match the FIELD_VARIATIONS export in src/types/schema.ts
     const requiredFields = {
-      'slug': ['slug', 'Slug', 'ID', 'Id', 'id'],
-      'customerName': ['customerName', 'Customer Name', 'Name', 'Client', 'Client Name'],
-      'offerAmount': ['offerAmount', 'Offer Amount', 'Amount', 'Value', 'Price'],
-      'pdfUrl': ['pdfUrl', 'Pdf Url', 'PDF URL', 'PDF', 'Document URL', 'Document Link', 'Attachment'],
-      'isSigned': ['isSigned', 'Is Signed', 'Signed', 'Status'],
+      'id': ['id', 'ID', 'Id'],
+      'slug': ['slug', 'Slug', 'id', 'ID', 'Id'],
+      'customerName': ['name', 'Name', 'customerName', 'Customer Name'],
+      'customerEmail': ['email', 'Email', 'customerEmail', 'Customer Email'],
+      'offerAmount': ['offerAmount', 'Offer Amount', 'Amount', 'Value'],
+      'pdfUrl': ['documentURL', 'DocumentURL', 'Document URL', 'pdfUrl', 'PDF URL'],
+      'isSigned': ['signed', 'Signed', 'isSigned', 'Is Signed'],
       'signedAt': ['signedAt', 'Signed At', 'Sign Date', 'Date Signed']
     };
     
@@ -103,22 +112,36 @@ async function validateAirtable() {
     
     console.log('\n📝 Field mapping results:');
     let missingFields = 0;
+    let missingRequiredFields = 0;
+    
+    // Check which fields are strictly required according to schema
+    const strictlyRequired = ['id', 'customerName', 'customerEmail', 'offerAmount', 'pdfUrl', 'isSigned'];
     
     for (const [appField, foundField] of Object.entries(fieldsFound)) {
+      const isRequired = strictlyRequired.includes(appField);
+      
       if (foundField) {
-        console.log(`✅ ${appField} → ${foundField}`);
+        console.log(`✅ ${appField} → ${foundField}${isRequired ? ' (REQUIRED)' : ''}`);
       } else {
-        console.log(`❌ ${appField} → NOT FOUND`);
+        console.log(`❌ ${appField} → NOT FOUND${isRequired ? ' (REQUIRED)' : ''}`);
         console.log(`   Acceptable field names: ${requiredFields[appField].join(', ')}`);
         missingFields++;
+        
+        if (isRequired) {
+          missingRequiredFields++;
+        }
       }
     }
     
-    if (missingFields > 0) {
-      console.error(`\n❌ Missing ${missingFields} required fields`);
-      console.log('\n💡 Please add these fields to your Airtable base or update field names to match the expected patterns');
+    if (missingRequiredFields > 0) {
+      console.error(`\n❌ Missing ${missingRequiredFields} required fields from schema`);
+      console.log('\n💡 You MUST add these required fields to your Airtable base to match JSON schema');
+      process.exit(1);
+    } else if (missingFields > 0) {
+      console.warn(`\n⚠️ Missing ${missingFields} optional fields`);
+      console.log('\n💡 Consider adding these fields to your Airtable base for complete functionality');
     } else {
-      console.log('\n✅ All required fields are present in your Airtable structure');
+      console.log('\n✅ All fields are present in your Airtable structure');
       
       // Now test record retrieval
       console.log('\n🔍 Testing record retrieval...');
@@ -172,8 +195,18 @@ function transformRecord(record, fieldMappings) {
   };
   
   // Map each field with special handling for certain types
+  transformed.id = record.id;
   transformed.slug = getValue('slug') || `record-${record.id}`;
   transformed.customerName = getValue('customerName') || 'Unnamed Customer';
+  
+  // Handle email field with validation
+  const email = getValue('customerEmail') || '';
+  transformed.customerEmail = email;
+  if (!email) {
+    console.warn('⚠️ Warning: Email field is empty but required in the JSON schema');
+  } else if (!validateEmail(email)) {
+    console.warn(`⚠️ Warning: Email '${email}' is not a valid format`);
+  }
   
   // Handle offer amount
   const rawAmount = getValue('offerAmount');

@@ -32,7 +32,7 @@
     "deploy:functions": "cd functions && npm run build && cd .. && firebase deploy --only functions",
     "test:build": "npm run build && npm run preview",
     "clean": "rm -rf dist && rm -rf functions/lib && rm -rf coverage",
-    "validate:airtable": "node scripts/validate-airtable.js"
+    "validate:airtable": "node -r dotenv/config scripts/validate-airtable.js"
   },
   "dependencies": {
     "lucide-react": "^0.515.0",

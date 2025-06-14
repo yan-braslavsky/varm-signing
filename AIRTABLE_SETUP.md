@@ -10,24 +10,27 @@ This document outlines how to set up the Airtable integration for the VARM Digit
 
    The application supports flexible field naming, including:
 
-   | App Field Name | Acceptable Airtable Field Names |
-   |----------------|--------------------------------|
-   | `slug`         | `slug`, `Slug`, `ID`, `Id`, `id` |
-   | `customerName` | `customerName`, `Customer Name`, `Name`, `Client`, `Client Name` |
-   | `offerAmount`  | `offerAmount`, `Offer Amount`, `Amount`, `Value`, `Price` |
-   | `pdfUrl`       | `pdfUrl`, `Pdf Url`, `PDF URL`, `PDF`, `Document URL`, `Document Link`, `Attachment` |
-   | `isSigned`     | `isSigned`, `Is Signed`, `Signed`, `Status` |
-   | `signedAt`     | `signedAt`, `Signed At`, `Sign Date`, `Date Signed` |
+   | App Field Name | Required Airtable Field Names (based on schema) | Acceptable Alternate Names |
+   |----------------|-------------------------------------------|----------------------------|
+   | `slug`         | `slug` | `Slug`, `ID`, `Id`, `id` |
+   | `customerName` | `name` | `Name`, `customerName`, `Customer Name` |
+   | `customerEmail` | `email` | `Email`, `customerEmail`, `Customer Email` |
+   | `offerAmount`  | `offerAmount` | `Offer Amount`, `Amount`, `Value`, `Price` |
+   | `pdfUrl`       | `documentURL` | `DocumentURL`, `Document URL`, `pdfUrl`, `PDF URL` |
+   | `isSigned`     | `signed` | `Signed`, `isSigned`, `Is Signed` |
+   | `signedAt`     | `signedAt` | `Signed At`, `Sign Date`, `Date Signed` |
 
 4. Add a few sample offers to test the integration
 
-   Sample fields to include:
+   Sample fields to include (based on the JSON schema):
    ```
+   id: offer-123
    slug: offer-123  
-   customerName: John Doe
+   name: John Doe
+   email: john.doe@example.com  # Required field per JSON schema
    offerAmount: 150000
-   pdfUrl: https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf
-   isSigned: false
+   documentURL: https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf
+   signed: false
    ```
 
 ## Environment Variables
@@ -84,3 +87,16 @@ Once you've set up the Airtable integration:
 - Use the validation script to check field mapping
 - The application supports various field naming patterns
 - If needed, the transform function in `src/api/airtableService.ts` can be customized further
+
+### Schema Requirements
+- The JSON schema requires certain fields to be present and properly formatted:
+  - `id` or `slug`: A unique identifier for each offer
+  - `name`: The customer's full name
+  - `email`: A valid email address (required by the schema)
+  - `offerAmount`: The offer amount in euros (must be a number)
+  - `documentURL`: A valid URL to the offer PDF document
+  - `signed`: Boolean indicating whether the offer has been signed
+  
+- The validation script will check these requirements and warn you about any issues
+- Missing or invalid email addresses will be flagged as warnings since they're required by the schema
+- The application will handle minor formatting issues, but data consistency is important
