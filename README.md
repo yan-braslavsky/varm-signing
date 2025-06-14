@@ -7,6 +7,27 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Firebase Cloud Functions
+
+The project includes a simple ping function that returns "pong". This function can be used to verify that cloud functions are working correctly.
+
+### Testing Cloud Functions Locally
+
+To test the cloud functions locally:
+
+```bash
+cd functions
+npm run serve
+```
+
+Then access the ping function at: http://localhost:5001/varm-55a88/us-central1/ping
+
+### Continuous Integration
+
+The project has separate CI workflows for Firebase Hosting and Firebase Functions:
+- Firebase Hosting is deployed on every push to the main branch
+- Firebase Functions are deployed separately when changes are detected in the `functions/` directory
+
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:

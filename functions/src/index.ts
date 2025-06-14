@@ -13,6 +13,15 @@ import * as logger from "firebase-functions/logger";
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
+/**
+ * Simple ping function that returns "pong".
+ * Can be used to check if the Cloud Functions are working.
+ */
+export const ping = onRequest((request, response) => {
+  logger.info("Ping function called", {structuredData: true});
+  response.send("pong");
+});
+
 // export const helloWorld = onRequest((request, response) => {
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
