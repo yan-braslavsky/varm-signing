@@ -25,7 +25,7 @@ export const NotFoundPage: React.FC = () => {
           
           <div className="space-y-4">
             <Link
-              to="/demo"
+              to="/offers"
               className="w-full flex items-center justify-center px-6 py-4 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-semibold transition-all hover-scale-102 focus-outline-none focus-ring-4 focus-ring-primary-200"
             >
               <Home className="w-5 h-5 mr-3" />
@@ -37,7 +37,7 @@ export const NotFoundPage: React.FC = () => {
               className="w-full flex items-center justify-center px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-semibold transition-all hover-scale-102"
             >
               <FileX className="w-5 h-5 mr-3" />
-              Try Demo Offer
+              Try Sample Offer
             </Link>
           </div>
         </div>

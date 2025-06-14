@@ -1,11 +1,14 @@
-# React + TypeScript + Vite
+# VARM Signing Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A production-grade React + TypeScript application for climate-tech offer signing. This platform allows customers to view and sign their climate-tech offers in a secure, user-friendly environment.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Real-time offer display with Airtable integration
+- Secure PDF viewing and signing
+- Mobile-responsive UI
+- Comprehensive logging and error handling
+- Firebase hosting and functions
 
 ## Environment Variables
 
@@ -25,9 +28,18 @@ For deployment with GitHub Actions, set these as repository secrets in your GitH
 
 See [ENV_VARIABLES.md](ENV_VARIABLES.md) for more detailed information.
 
+## Offer Management
+
+The platform uses Airtable as its backend database. The Offers page (/offers) displays all available offers with their details. When an offer is signed, the status is updated in Airtable in real-time.
+
 ## Firebase Cloud Functions
 
-The project includes a simple ping function that returns "pong". This function can be used to verify that cloud functions are working correctly.
+The project includes Firebase Cloud Functions for server-side operations:
+
+- `ping`: A simple function that returns "pong" (for testing connectivity)
+- `getOffer`: Retrieves a specific offer by slug
+- `getAllOffers`: Gets all available offers
+- `signOffer`: Updates an offer's signature status
 
 ### Testing Cloud Functions Locally
 
