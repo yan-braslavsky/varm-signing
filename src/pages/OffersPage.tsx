@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { offerApi } from '../api/offerApi';
 import type { Offer, ApiResponse } from '../types/offer.js';
-import { FileText, CheckCircle, DollarSign, ExternalLink } from 'lucide-react';
+import { FileText, CheckCircle, Euro, ExternalLink } from 'lucide-react';
 import { Logger } from '../utils/logger';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { CardSkeleton } from '../components/LoadingSkeleton';
@@ -182,12 +182,6 @@ export const OffersPage: React.FC = () => {
           <p className="text-gray-600 mb-6">
             Choose an offer to view and complete the digital signing process
           </p>
-          <div className="bg-white rounded-xl p-4 shadow-md border border-gray-200">
-            <p className="text-sm text-gray-700">
-              <strong>Features:</strong> Secure digital signing, real-time status updates, mobile-responsive design,
-              and instant confirmation upon completion.
-            </p>
-          </div>
           
           {/* Error Message Display */}
           {error && (
@@ -249,7 +243,7 @@ export const OffersPage: React.FC = () => {
 
               <div className="space-y-3">
                 <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                  <DollarSign className="w-5 h-5 text-emerald-600" />
+                  <Euro className="w-5 h-5 text-emerald-600" />
                   <div>
                     <p className="text-sm text-gray-600">Offer Amount</p>
                     <p className="text-lg font-bold text-gray-900">

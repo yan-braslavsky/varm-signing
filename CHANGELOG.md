@@ -14,6 +14,11 @@
   - Updated currency formatting in OffersPage from USD to EUR with de-DE locale
   - Ensured consistent Euro formatting across all pages (OffersPage and SignPage)
   - All amounts now properly display with Euro symbol (€) and German number formatting
+  - Replaced DollarSign icon with Euro icon in OffersPage offer cards for visual consistency
+- **Test Suite**: Updated API tests to use actual offer data instead of mock data
+  - Updated test slugs to use real offers from Airtable database (offer001, offer002, offer003, etc.)
+  - Fixed test expectations to match actual API response error messages
+  - Ensured tests work with live Airtable data while maintaining reliability
 
 ### Improved
 - **Enhanced error messages for invalid offer links**
@@ -23,6 +28,10 @@
   - Added "Return to Offers" button to invalid offer error pages for better navigation
   - Enhanced ErrorMessage component to support both "Try Again" and "Go Back" actions
   - Improved connection error messages to be more specific about network issues
+- **Features component removal**: Removed the Features component and its descriptive text from the OffersPage header section
+  - Eliminated the white card containing "Features: Secure digital signing, real-time status updates, mobile-responsive design, and instant confirmation upon completion"
+  - Simplified the offers page header to focus on essential information only
+  - Updated corresponding test case in OffersPage.test.tsx to reflect the removal
 
 ### Added
 - Created debug scripts (`scripts/debug-airtable.js`, `scripts/test-filter.js`, `scripts/test-error-messages.js`, `scripts/test-currency.js`) for troubleshooting Airtable integration and validating currency formatting

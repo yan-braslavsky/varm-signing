@@ -39,6 +39,7 @@ function testCurrencyFormatting() {
   
   console.log('\n✅ All currency formatting now uses Euro (€) symbol!');
   console.log('📍 Both pages use de-DE locale for proper German formatting.');
+  console.log('🎨 OffersPage now uses Euro icon instead of DollarSign icon for visual consistency.');
 }
 
 testCurrencyFormatting();
