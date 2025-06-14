@@ -20,7 +20,7 @@ export const SignPage: React.FC = () => {
   const fetchOffer = async () => {
     if (!slug) {
       Logger.error('Attempted to fetch offer with no slug', undefined, { context: 'SignPage.fetchOffer' });
-      setError('Invalid offer link');
+      setError('Invalid offer link. The URL appears to be incomplete or malformed.');
       setLoading(false);
       return;
     }
@@ -35,7 +35,7 @@ export const SignPage: React.FC = () => {
       if (response.error) {
         if (response.status === 404) {
           Logger.warn(`Offer not found: ${slug}`, { context: 'SignPage.fetchOffer', data: { status: response.status } });
-          setError('This offer link is invalid or has expired');
+          setError('Offer not found. This link may be incorrect or the offer may have been removed.');
         } else {
           Logger.error(`Error fetching offer: ${response.error}`, undefined, { 
             context: 'SignPage.fetchOffer',
@@ -56,7 +56,7 @@ export const SignPage: React.FC = () => {
       }
     } catch (err) {
       Logger.error('Failed to fetch offer', err as Error, { context: 'SignPage.fetchOffer', data: { slug } });
-      setError('Failed to load offer. Please check your connection and try again.');
+      setError('Unable to connect to the server. Please check your internet connection and try again.');
     } finally {
       setLoading(false);
       Logger.info('Completed offer fetch process', { context: 'SignPage.fetchOffer', data: { slug } });
@@ -154,9 +154,11 @@ export const SignPage: React.FC = () => {
             <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
           </div>
           <ErrorMessage
-            title="Unable to Load Offer"
+            title="Offer Not Found"
             message={error}
             onRetry={fetchOffer}
+            onBack={() => navigate('/offers')}
+            backLabel="Return to Offers"
             className="animate-fade-in"
           />
         </div>
@@ -173,7 +175,9 @@ export const SignPage: React.FC = () => {
           </div>
           <ErrorMessage
             title="Offer Not Found"
-            message="The requested offer could not be found."
+            message="The requested offer could not be found. Please check the link or contact support if you believe this is an error."
+            onBack={() => navigate('/offers')}
+            backLabel="Return to Offers"
             className="animate-fade-in"
           />
         </div>

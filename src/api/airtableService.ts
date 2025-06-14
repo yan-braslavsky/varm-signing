@@ -176,7 +176,7 @@ export const airtableService = {
       
       if (!data.records || data.records.length === 0) {
         return {
-          error: 'This offer link is invalid or has expired',
+          error: 'Offer not found. This link may be incorrect or the offer may have been removed.',
           status: 404,
         };
       }
@@ -236,7 +236,7 @@ export const airtableService = {
 
       if (!matchingRecord) {
         return {
-          error: 'This offer link is invalid or has expired',
+          error: 'Offer not found. This link may be incorrect or the offer may have been removed.',
           status: 404,
         };
       }

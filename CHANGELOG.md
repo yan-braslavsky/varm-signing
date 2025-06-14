@@ -11,10 +11,21 @@
   - Enhanced error handling with detailed logging for better debugging
   - Added debug scripts to validate Airtable connection and data structure
 
+### Improved
+- **Enhanced error messages for invalid offer links**
+  - Replaced generic "Unable to Load Offer" with more specific "Offer Not Found" title
+  - Updated error messages to be more user-friendly and informative
+  - Changed "This offer link is invalid or has expired" to "Offer not found. This link may be incorrect or the offer may have been removed."
+  - Added "Return to Offers" button to invalid offer error pages for better navigation
+  - Enhanced ErrorMessage component to support both "Try Again" and "Go Back" actions
+  - Improved connection error messages to be more specific about network issues
+
 ### Added
-- Created debug scripts (`scripts/debug-airtable.js`, `scripts/test-filter.js`) for troubleshooting Airtable integration
+- Created debug scripts (`scripts/debug-airtable.js`, `scripts/test-filter.js`, `scripts/test-error-messages.js`) for troubleshooting Airtable integration
 - Added comprehensive error logging for Airtable API responses
 - Added alternative offer fetching method as fallback for filter formula issues
+- Enhanced ErrorMessage component with `onBack` and `backLabel` props for navigation
+- Added responsive button layout (stacked on mobile, side-by-side on desktop) in ErrorMessage component
 
 ## v1.2.0 - 2025-06-14
 

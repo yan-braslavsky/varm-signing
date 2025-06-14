@@ -1,11 +1,13 @@
 import React from 'react';
-import { AlertCircle, XCircle, RefreshCw } from 'lucide-react';
+import { AlertCircle, XCircle, RefreshCw, ArrowLeft } from 'lucide-react';
 
 interface ErrorMessageProps {
   title?: string;
   message: string;
   type?: 'error' | 'warning' | 'info';
   onRetry?: () => void;
+  onBack?: () => void;
+  backLabel?: string;
   className?: string;
 }
 
@@ -14,6 +16,8 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
   message,
   type = 'error',
   onRetry,
+  onBack,
+  backLabel = 'Go Back',
   className = '',
 }) => {
   const getIcon = () => {
@@ -53,14 +57,27 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
             </h3>
           )}
           <p className="text-gray-700 leading-relaxed">{message}</p>
-          {onRetry && (
-            <button
-              onClick={onRetry}
-              className="mt-4 inline-flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Try Again
-            </button>
+          {(onRetry || onBack) && (
+            <div className="mt-4 flex flex-col sm:flex-row gap-3">
+              {onRetry && (
+                <button
+                  onClick={onRetry}
+                  className="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Try Again
+                </button>
+              )}
+              {onBack && (
+                <button
+                  onClick={onBack}
+                  className="inline-flex items-center justify-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  {backLabel}
+                </button>
+              )}
+            </div>
           )}
         </div>
       </div>
