@@ -2,6 +2,17 @@
 
 ## Unreleased - 2025-06-14
 
+### Added
+- **PDF Document Viewer**: Implemented PDF viewer component for offer documents
+  - Added new `PDFViewer` component with iframe-based PDF display
+  - Mobile-friendly design with responsive layout for desktop and mobile
+  - Fallback handling for missing or invalid PDF URLs with user-friendly error messages
+  - Loading states and error handling for PDF load failures
+  - Download PDF functionality with external link option
+  - Updated SignPage layout to use side-by-side grid layout on larger screens
+  - Added support for both `documentURL` and `pdfUrl` fields for backward compatibility
+  - Comprehensive test coverage for PDF viewer functionality
+
 ### Fixed
 - **CRITICAL FIX**: Resolved Airtable API 422 errors when fetching offers
   - Updated filter formula to use correct Airtable field names ("Slug" instead of "slug")

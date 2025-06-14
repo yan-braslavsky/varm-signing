@@ -3,7 +3,8 @@ export interface Offer {
   customerName: string;
   customerEmail?: string; // Added to match Airtable schema
   offerAmount: number;
-  pdfUrl: string;
+  documentURL: string; // Renamed from pdfUrl for consistency
+  pdfUrl: string; // Keep for backward compatibility
   isSigned: boolean;
   signedAt?: string;
 }

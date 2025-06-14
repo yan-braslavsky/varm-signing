@@ -6,6 +6,7 @@ import { offerApi } from '../api/offerApi';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { Card } from '../components/Card';
 import { ErrorMessage } from '../components/ErrorMessage';
+import { PDFViewer } from '../components/PDFViewer';
 import { Logger } from '../utils/logger';
 
 export const SignPage: React.FC = () => {
@@ -187,56 +188,70 @@ export const SignPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
-      <div className="max-w-md mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Sign and Accept</h2>
         </div>
 
-        {/* Offer Details */}
-        <Card className="mb-6">
-          <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">{offer.customerName}</h3>
-            <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
-              {new Intl.NumberFormat('de-DE', {
-                style: 'currency',
-                currency: 'EUR',
-                minimumFractionDigits: 2,
-              }).format(offer.offerAmount)}
-            </div>
-            
-            {/* PDF placeholder or embed */}
-            <div className="bg-gray-100 rounded-2xl p-6 mb-6 text-center">
-              <p className="text-gray-600">PDF Document Preview</p>
-              <p className="text-sm text-gray-500 mt-2">
-                {offer.pdfUrl ? 'Offer document attached' : 'Document will be available after signing'}
-              </p>
-            </div>
-          </div>
-        </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Offer Details */}
+          <div className="order-2 lg:order-1">
+            <Card className="mb-6">
+              <div className="text-center">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{offer.customerName}</h3>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
+                  {new Intl.NumberFormat('de-DE', {
+                    style: 'currency',
+                    currency: 'EUR',
+                    minimumFractionDigits: 2,
+                  }).format(offer.offerAmount)}
+                </div>
+              </div>
+            </Card>
 
-        {/* Sign Button */}
-        {!offer.isSigned ? (
-          <PrimaryButton
-            onClick={handleSign}
-            isLoading={signing}
-            disabled={signing}
-          >
-            Sign and Accept
-          </PrimaryButton>
-        ) : (
-          <div className="text-center">
-            <div className="bg-green-50 rounded-2xl p-4 mb-4">
-              <div className="text-green-600 text-4xl mb-2">✅</div>
-              <p className="text-green-800 font-semibold">Already Signed</p>
-              <p className="text-green-600 text-sm">Thank you for your signature!</p>
-            </div>
-            <PrimaryButton onClick={() => window.location.href = '/'}>
-              Back to VARM
-            </PrimaryButton>
+            {/* Sign Button */}
+            {!offer.isSigned ? (
+              <PrimaryButton
+                onClick={handleSign}
+                isLoading={signing}
+                disabled={signing}
+              >
+                Sign and Accept
+              </PrimaryButton>
+            ) : (
+              <div className="text-center">
+                <div className="bg-green-50 rounded-2xl p-4 mb-4">
+                  <div className="text-green-600 text-4xl mb-2">✅</div>
+                  <p className="text-green-800 font-semibold">Already Signed</p>
+                  <p className="text-green-600 text-sm">Thank you for your signature!</p>
+                </div>
+                <PrimaryButton onClick={() => window.location.href = '/'}>
+                  Back to VARM
+                </PrimaryButton>
+              </div>
+            )}
           </div>
-        )}
+
+          {/* PDF Document Viewer */}
+          <div className="order-1 lg:order-2">
+            {(offer.documentURL || offer.pdfUrl) ? (
+              <PDFViewer url={offer.documentURL || offer.pdfUrl} />
+            ) : (
+              <div className="bg-white rounded-xl shadow-md p-4">
+                <h2 className="text-lg font-semibold mb-3 text-gray-900">Offer Document</h2>
+                <div className="bg-gray-50 rounded-md p-8 text-center">
+                  <div className="text-gray-400 text-4xl mb-3">📄</div>
+                  <p className="text-gray-600 font-medium">Document not available</p>
+                  <p className="text-gray-500 text-sm mt-1">
+                    The document will be available after processing
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

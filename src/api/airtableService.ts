@@ -101,6 +101,7 @@ const transformAirtableRecord = (record: any): Offer => {
     customerName: customerName,
     customerEmail: customerEmail,
     offerAmount: offerAmount,
+    documentURL: pdfUrl || '', // Map pdfUrl to documentURL for consistency
     pdfUrl: pdfUrl,
     isSigned: isSigned,
     signedAt: signedAt === null ? undefined : signedAt,
