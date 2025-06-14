@@ -1,5 +1,39 @@
 # Changelog
 
+## v1.2.0 - 2025-06-14
+
+### Added
+- Installed and configured TailwindCSS for the project with proper PostCSS setup
+- Created reusable `PrimaryButton` component with emerald color scheme and loading states
+- Created reusable `Card` component with rounded corners and soft shadows
+- Added emerald color utility classes (bg-emerald-600, bg-emerald-700, text-emerald-600, etc.)
+- Added responsive padding utilities (sm:px-6) for mobile-first design
+- Added green color utilities for success states (text-green-600, text-green-800, bg-green-50)
+
+### Changed
+- **BREAKING CHANGE**: Redesigned SignPage to match clean, mobile-first UI mockup
+  - Changed from two-column layout to centered single-column layout
+  - Updated to use max-w-md container for mobile-first approach
+  - Replaced complex header with simple "VARM" branding
+  - Updated offer display to show customer name and amount prominently
+  - Added PDF placeholder card instead of full PDF viewer
+  - Integrated new PrimaryButton component with "Sign and Accept" text
+- **BREAKING CHANGE**: Redesigned SuccessPage to match mockup design
+  - Updated to mobile-first centered layout (max-w-md)
+  - Added large checkmark icon in emerald circle
+  - Simplified messaging with "Thank you! Your offer has been signed."
+  - Added formatted date display
+  - Updated button to use new PrimaryButton component
+- Updated CSS to include Tailwind base, components, and utilities
+- Enhanced loading and error states to match new design language
+- Changed currency display to use Euro (EUR) format instead of USD
+
+### Removed
+- Removed dependency on OfferCard, SignButton, and PDFViewer components in SignPage
+- Removed SuccessMessage component dependency in SuccessPage
+- Removed back navigation link from SignPage to match mockup
+- Removed complex multi-column layout in favor of simple mobile-first design
+
 ## v1.1.0 - 2025-06-14
 
 ### Added
