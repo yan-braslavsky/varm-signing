@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { ArrowLeft } from 'lucide-react';
 import type { Offer } from '../types/offer.js';
 import { offerApi } from '../api/offerApi';
-import { OfferCard } from '../components/OfferCard';
-import { SignButton } from '../components/SignButton';
-import { PDFViewer } from '../components/PDFViewer';
+import { PrimaryButton } from '../components/PrimaryButton';
+import { Card } from '../components/Card';
 import { ErrorMessage } from '../components/ErrorMessage';
-import { CardSkeleton, PDFSkeleton } from '../components/LoadingSkeleton';
 import { Logger } from '../utils/logger';
 
 export const SignPage: React.FC = () => {
@@ -132,16 +129,18 @@ export const SignPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid lg-grid-cols-2 gap-8">
-            <div>
-              <CardSkeleton />
-            </div>
-            <div>
-              <PDFSkeleton />
-            </div>
+      <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
+        <div className="max-w-md mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
           </div>
+          <Card>
+            <div className="animate-pulse">
+              <div className="h-4 bg-gray-200 rounded mb-4"></div>
+              <div className="h-8 bg-gray-200 rounded mb-4"></div>
+              <div className="h-24 bg-gray-200 rounded"></div>
+            </div>
+          </Card>
         </div>
       </div>
     );
@@ -149,8 +148,11 @@ export const SignPage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8 px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
+        <div className="max-w-md mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
+          </div>
           <ErrorMessage
             title="Unable to Load Offer"
             message={error}
@@ -164,8 +166,11 @@ export const SignPage: React.FC = () => {
 
   if (!offer) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8 px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
+        <div className="max-w-md mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
+          </div>
           <ErrorMessage
             title="Offer Not Found"
             message="The requested offer could not be found."
@@ -177,60 +182,57 @@ export const SignPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
+      <div className="max-w-md mx-auto">
         {/* Header */}
-        <div className="text-center mb-8 animate-fade-in">
-          <div className="flex items-center justify-between mb-4">
-            <Link 
-              to="/offers" 
-              className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4 mr-1" />
-              Back to Offers
-            </Link>
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            VARM Digital Signing
-          </h1>
-          <p className="text-gray-600">
-            Review and sign your personalized offer
-          </p>
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Sign and Accept</h2>
         </div>
 
-        {/* Main Content */}
-        <div className="grid lg-grid-cols-2 gap-8">
-          {/* Left Column - Offer Details */}
-          <div className="space-y-6 animate-slide-up">
-            <OfferCard offer={offer} />
+        {/* Offer Details */}
+        <Card className="mb-6">
+          <div className="text-center">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">{offer.customerName}</h3>
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
+              {new Intl.NumberFormat('de-DE', {
+                style: 'currency',
+                currency: 'EUR',
+                minimumFractionDigits: 2,
+              }).format(offer.offerAmount)}
+            </div>
             
-            <SignButton
-              onSign={handleSign}
-              isSigned={offer.isSigned}
-              isLoading={signing}
-            />
-
-            {offer.isSigned && (
-              <div className="text-center">
-                <p className="text-sm text-gray-600">
-                  This offer has already been signed. Thank you!
-                </p>
-              </div>
-            )}
+            {/* PDF placeholder or embed */}
+            <div className="bg-gray-100 rounded-2xl p-6 mb-6 text-center">
+              <p className="text-gray-600">PDF Document Preview</p>
+              <p className="text-sm text-gray-500 mt-2">
+                {offer.pdfUrl ? 'Offer document attached' : 'Document will be available after signing'}
+              </p>
+            </div>
           </div>
+        </Card>
 
-          {/* Right Column - PDF Viewer */}
-          <div className="animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            <PDFViewer url={offer.pdfUrl} />
+        {/* Sign Button */}
+        {!offer.isSigned ? (
+          <PrimaryButton
+            onClick={handleSign}
+            isLoading={signing}
+            disabled={signing}
+          >
+            Sign and Accept
+          </PrimaryButton>
+        ) : (
+          <div className="text-center">
+            <div className="bg-green-50 rounded-2xl p-4 mb-4">
+              <div className="text-green-600 text-4xl mb-2">✅</div>
+              <p className="text-green-800 font-semibold">Already Signed</p>
+              <p className="text-green-600 text-sm">Thank you for your signature!</p>
+            </div>
+            <PrimaryButton onClick={() => window.location.href = '/'}>
+              Back to VARM
+            </PrimaryButton>
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-          <p className="text-sm text-gray-500">
-            © 2024 VARM. Powered by clean energy solutions.
-          </p>
-        </div>
+        )}
       </div>
     </div>
   );

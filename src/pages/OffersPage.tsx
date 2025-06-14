@@ -152,7 +152,7 @@ export const OffersPage: React.FC = () => {
   if (loading) {
     Logger.debug('Rendering loading state', { context: 'OffersPage.render' });
     return (
-      <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="min-h-screen bg-gray-50 py-4 px-4 sm:py-8 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8 animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-64 mx-auto mb-2"></div>
@@ -161,7 +161,7 @@ export const OffersPage: React.FC = () => {
               <div className="h-4 bg-gray-200 rounded w-full"></div>
             </div>
           </div>
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
             {[1, 2, 3, 4, 5].map((i) => (
               <CardSkeleton key={`skeleton-${i}`} />
             ))}
@@ -172,11 +172,11 @@ export const OffersPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-gray-50 py-4 px-4 sm:py-8 sm:px-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             VARM Digital Signing Platform
           </h1>
           <p className="text-gray-600 mb-6">
@@ -210,9 +210,9 @@ export const OffersPage: React.FC = () => {
         </div>
 
         {/* Offers Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
           {offers.length === 0 && !loading && !error ? (
-            <div className="col-span-2 p-8 bg-white rounded-xl shadow text-center">
+            <div className="col-span-2 p-8 bg-white rounded-2xl shadow-md text-center">
               <FileText className="w-12 h-12 mx-auto text-gray-400 mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No Offers Available</h3>
               <p className="text-gray-600">
@@ -224,11 +224,11 @@ export const OffersPage: React.FC = () => {
             <Link
               key={`offer-${offer.slug || index}`}
               to={offer.slug ? `/sign/${offer.slug}` : '#'}
-              className="block bg-white rounded-2xl shadow-lg border border-gray-100 p-6 transition-all hover:scale-105 hover:shadow-xl"
+              className="block bg-white rounded-2xl shadow-md border border-gray-100 p-6 transition-all duration-200 hover:shadow-lg hover:scale-105"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-3">
-                  <FileText className="w-6 h-6 text-primary-600" />
+                  <FileText className="w-6 h-6 text-emerald-600" />
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">
                       {offer.customerName}
@@ -240,7 +240,7 @@ export const OffersPage: React.FC = () => {
                   </div>
                 </div>
                 {offer.isSigned && (
-                  <div className="flex items-center space-x-1 px-2 py-1 bg-accent-100 text-accent-800 rounded-full text-xs font-medium">
+                  <div className="flex items-center space-x-1 px-2 py-1 bg-green-50 text-green-800 rounded-full text-xs font-medium">
                     <CheckCircle className="w-3 h-3" />
                     <span>Signed</span>
                   </div>
@@ -249,7 +249,7 @@ export const OffersPage: React.FC = () => {
 
               <div className="space-y-3">
                 <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                  <DollarSign className="w-5 h-5 text-accent-600" />
+                  <DollarSign className="w-5 h-5 text-emerald-600" />
                   <div>
                     <p className="text-sm text-gray-600">Offer Amount</p>
                     <p className="text-lg font-bold text-gray-900">
@@ -275,7 +275,7 @@ export const OffersPage: React.FC = () => {
 
         {/* Footer */}
         <div className="text-center mt-8 animate-fade-in">
-          <p className="text-sm text-gray-500">
+          <p className="text-xs sm:text-sm text-gray-500">
             © 2024 VARM Digital Signing Platform - Powered by Airtable
           </p>
         </div>
