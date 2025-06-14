@@ -82,3 +82,11 @@
 - Fixed OffersPage rendering test by improving the component's robustness to handle variable API response timings.
 - Ensured consistent test behavior by addressing edge cases in Airtable integration.
 - Verified all tests now pass correctly with robust data transformation.
+- Fixed horizontal scrolling issues on mobile devices by:
+  - Removing fixed padding from #root element that was causing viewport overflow
+  - Updated all pages to use responsive padding (px-3 on mobile, sm:px-6 on larger screens)
+  - Made typography responsive (text-2xl on mobile, sm:text-3xl on larger screens)
+  - Added responsive gaps for grid layouts (gap-4 on mobile, md:gap-6 on larger screens)
+  - Enhanced Card component with responsive padding (p-4 on mobile, sm:p-6 on larger screens)
+  - Added CSS rules to prevent any element from exceeding viewport width
+  - Ensured proper text wrapping with word-wrap and overflow-wrap properties

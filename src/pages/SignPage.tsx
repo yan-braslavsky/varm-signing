@@ -129,7 +129,7 @@ export const SignPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white px-4 sm:px-6 py-6">
+      <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
@@ -148,7 +148,7 @@ export const SignPage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white px-4 sm:px-6 py-6">
+      <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
@@ -166,7 +166,7 @@ export const SignPage: React.FC = () => {
 
   if (!offer) {
     return (
-      <div className="min-h-screen bg-white px-4 sm:px-6 py-6">
+      <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
@@ -182,7 +182,7 @@ export const SignPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white px-4 sm:px-6 py-6">
+    <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
       <div className="max-w-md mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -194,7 +194,7 @@ export const SignPage: React.FC = () => {
         <Card className="mb-6">
           <div className="text-center">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">{offer.customerName}</h3>
-            <div className="text-3xl font-bold text-gray-900 mb-6">
+            <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
               {new Intl.NumberFormat('de-DE', {
                 style: 'currency',
                 currency: 'EUR',

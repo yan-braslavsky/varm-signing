@@ -32,7 +32,7 @@ export const SuccessPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white px-4 sm:px-6 py-6">
+    <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
       <div className="max-w-md mx-auto">
         {/* Header */}
         <div className="text-center mb-8">

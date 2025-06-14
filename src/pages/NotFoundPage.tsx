@@ -4,15 +4,15 @@ import { FileX, Home } from 'lucide-react';
 
 export const NotFoundPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white py-16 px-4 sm:px-6">
+    <div className="min-h-screen bg-white py-12 px-3 sm:py-16 sm:px-6">
       <div className="max-w-md mx-auto text-center">
         {/* 404 Icon */}
         <div className="mb-8 animate-bounce-in">
           <FileX className="w-24 h-24 text-gray-400 mx-auto mb-4" />
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
             404 - Page Not Found
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-lg sm:text-xl text-gray-600 mb-8">
             The page you're looking for doesn't exist or has been moved.
           </p>
         </div>
