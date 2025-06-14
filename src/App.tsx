@@ -1,35 +1,94 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { 
+  Route, 
+  Navigate,
+  createRoutesFromElements,
+  createBrowserRouter,
+  RouterProvider,
+  Outlet
+} from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { SignPage } from './pages/SignPage';
+import { SuccessPage } from './pages/SuccessPage';
+import { DemoPage } from './pages/DemoPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+// Root layout component that includes common UI elements
+function RootLayout() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+      <Outlet /> {/* This is where nested routes will render */}
+      
+      {/* Global toast notifications */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#ffffff',
+            color: '#1f2937',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            border: '1px solid #e5e7eb',
+            borderRadius: '12px',
+            padding: '16px',
+          },
+          success: {
+            iconTheme: {
+              primary: '#10b981',
+              secondary: '#ffffff',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#ffffff',
+            },
+          },
+        }}
+      />
+    </div>
+  );
 }
 
-export default App
+// Create router with supported future flags to address warnings
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route element={<RootLayout />}>
+      {/* Redirect root to demo page */}
+      <Route path="/" element={<Navigate to="/demo" replace />} />
+      
+      {/* Demo page with all offers */}
+      <Route path="/demo" element={<DemoPage />} />
+      
+      {/* Sign page route */}
+      <Route path="/sign/:slug" element={<SignPage />} />
+      
+      {/* Success page route */}
+      <Route path="/success" element={<SuccessPage />} />
+      
+      {/* Catch all - redirect to demo */}
+      <Route path="*" element={<NotFoundPage />} />
+    </Route>
+  ),
+  {
+    // Set compatible future flags for React Router DOM 6.28.0
+    future: {
+      v7_fetcherPersist: true,
+      v7_normalizeFormMethod: true,
+      v7_relativeSplatPath: true,
+      // v7_partialHydration: true, // Skip as it's likely not needed in this app
+    }
+  }
+);
+
+function App() {
+  return (
+    <RouterProvider 
+      router={router}
+      future={{
+        v7_startTransition: true,
+      }} 
+    />
+  );
+}
+
+export default App;
