@@ -1,29 +1,85 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { offerApi } from '../api/offerApi';
-import type { Offer } from '../types/offer.js';
+import type { Offer, ApiResponse } from '../types/offer.js';
 import { FileText, CheckCircle, DollarSign, ExternalLink } from 'lucide-react';
+import { Logger } from '../utils/logger';
+import { ErrorMessage } from '../components/ErrorMessage';
+import { CardSkeleton } from '../components/LoadingSkeleton';
 
 export const DemoPage: React.FC = () => {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Track retry attempts
+  const [retryCounter, setRetryCounter] = useState<number>(0);
 
   useEffect(() => {
     const fetchOffers = async () => {
+      Logger.info('Initiating data fetch for offers', { 
+        context: 'DemoPage.fetchOffers',
+        data: { retryAttempt: retryCounter }
+      });
+      
       try {
-        const response = await offerApi.getAllOffers();
-        if (response.data) {
-          setOffers(response.data);
+        const response: ApiResponse<Offer[]> = await offerApi.getAllOffers();
+        
+        if (response.error) {
+          setError(response.error);
+          Logger.error(`Error in offers response: ${response.error}`, undefined, {
+            context: 'DemoPage.fetchOffers',
+            data: { status: response.status }
+          });
+        } else if (!response.data || response.data.length === 0) {
+          Logger.warn('No offers found in the response', { 
+            context: 'DemoPage.fetchOffers',
+            data: response
+          });
+          setOffers([]);
+        } else {
+          Logger.info(`Successfully loaded ${response.data.length} offers`, { 
+            context: 'DemoPage.fetchOffers' 
+          });
+          
+          // Data validation - ensure all required fields are present
+          const validOffers = response.data.filter(offer => {
+            const isValid = Boolean(
+              offer.slug && 
+              offer.customerName && 
+              typeof offer.offerAmount === 'number'
+            );
+            
+            if (!isValid) {
+              Logger.warn('Found invalid offer data', { 
+                context: 'DemoPage.fetchOffers',
+                data: offer
+              });
+            }
+            
+            return isValid;
+          });
+          
+          if (validOffers.length < response.data.length) {
+            Logger.warn(`Filtered out ${response.data.length - validOffers.length} invalid offers`, {
+              context: 'DemoPage.fetchOffers'
+            });
+          }
+          
+          setOffers(validOffers);
         }
       } catch (error) {
-        console.error('Failed to fetch offers:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        Logger.error('Failed to fetch offers', error as Error, { context: 'DemoPage.fetchOffers' });
+        setError(errorMessage);
       } finally {
         setLoading(false);
+        Logger.info('Completed offers fetch process', { context: 'DemoPage.fetchOffers' });
       }
     };
 
     fetchOffers();
-  }, []);
+  }, [retryCounter]); // Add retryCounter as dependency to allow retrying
 
   const formatAmount = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -33,7 +89,18 @@ export const DemoPage: React.FC = () => {
     }).format(amount);
   };
 
+  // Retry handler for error state
+  const handleRetry = () => {
+    Logger.info('Retrying offer fetch', { context: 'DemoPage.handleRetry' });
+    setLoading(true);
+    setError(null);
+    
+    // Re-trigger effect by using a state dependency
+    setRetryCounter(prev => prev + 1);
+  };
+  
   if (loading) {
+    Logger.debug('Rendering loading state', { context: 'DemoPage.render' });
     return (
       <div className="min-h-screen bg-gray-50 py-8 px-4">
         <div className="max-w-4xl mx-auto">
@@ -46,12 +113,7 @@ export const DemoPage: React.FC = () => {
           </div>
           <div className="grid lg:grid-cols-2 gap-8">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={`skeleton-${i}`} className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 animate-pulse">
-                <div className="h-6 bg-gray-200 rounded mb-4 w-3/4"></div>
-                <div className="h-4 bg-gray-200 rounded mb-3 w-1/2"></div>
-                <div className="h-16 bg-gray-200 rounded mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/4"></div>
-              </div>
+              <CardSkeleton key={`skeleton-${i}`} />
             ))}
           </div>
         </div>
@@ -76,11 +138,39 @@ export const DemoPage: React.FC = () => {
               and instant confirmation upon completion.
             </p>
           </div>
+          
+          {/* Error Message Display */}
+          {error && (
+            <ErrorMessage 
+              title="Error loading offers"
+              message={error}
+              type="error"
+              className="mt-4"
+              onRetry={handleRetry}
+            />
+          )}
+          
+          {/* Data Status Indicator */}
+          {!error && offers.length > 0 && (
+            <div className="mt-4 bg-green-50 p-2 rounded-lg text-sm text-green-700 flex items-center justify-center">
+              <CheckCircle className="w-4 h-4 mr-2" />
+              <span>Successfully loaded {offers.length} offers</span>
+            </div>
+          )}
         </div>
 
         {/* Offers Grid */}
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
-          {offers.map((offer, index) => (
+          {offers.length === 0 && !loading && !error ? (
+            <div className="col-span-2 p-8 bg-white rounded-xl shadow text-center">
+              <FileText className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No Offers Available</h3>
+              <p className="text-gray-600">
+                There are currently no offers available in the system.
+              </p>
+            </div>
+          ) : (
+            offers.map((offer, index) => (
             <Link
               key={`offer-${offer.slug || index}`}
               to={offer.slug ? `/sign/${offer.slug}` : '#'}
@@ -127,7 +217,7 @@ export const DemoPage: React.FC = () => {
                 <ExternalLink className="w-4 h-4 ml-2" />
               </div>
             </Link>
-          ))}
+          )))}
         </div>
 
         {/* Footer */}

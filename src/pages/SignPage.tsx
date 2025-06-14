@@ -9,6 +9,7 @@ import { SignButton } from '../components/SignButton';
 import { PDFViewer } from '../components/PDFViewer';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { CardSkeleton, PDFSkeleton } from '../components/LoadingSkeleton';
+import { Logger } from '../utils/logger';
 
 export const SignPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -21,11 +22,13 @@ export const SignPage: React.FC = () => {
 
   const fetchOffer = async () => {
     if (!slug) {
+      Logger.error('Attempted to fetch offer with no slug', undefined, { context: 'SignPage.fetchOffer' });
       setError('Invalid offer link');
       setLoading(false);
       return;
     }
 
+    Logger.info(`Fetching offer with slug: ${slug}`, { context: 'SignPage.fetchOffer' });
     try {
       setLoading(true);
       setError(null);
@@ -34,24 +37,49 @@ export const SignPage: React.FC = () => {
       
       if (response.error) {
         if (response.status === 404) {
+          Logger.warn(`Offer not found: ${slug}`, { context: 'SignPage.fetchOffer', data: { status: response.status } });
           setError('This offer link is invalid or has expired');
         } else {
+          Logger.error(`Error fetching offer: ${response.error}`, undefined, { 
+            context: 'SignPage.fetchOffer',
+            data: { slug, status: response.status } 
+          });
           setError(response.error);
         }
       } else if (response.data) {
+        Logger.info(`Successfully loaded offer: ${slug}`, { 
+          context: 'SignPage.fetchOffer',
+          data: {
+            customerName: response.data.customerName,
+            offerAmount: response.data.offerAmount,
+            isSigned: response.data.isSigned
+          }
+        });
         setOffer(response.data);
       }
     } catch (err) {
-      console.error('Failed to fetch offer:', err);
+      Logger.error('Failed to fetch offer', err as Error, { context: 'SignPage.fetchOffer', data: { slug } });
       setError('Failed to load offer. Please check your connection and try again.');
     } finally {
       setLoading(false);
+      Logger.info('Completed offer fetch process', { context: 'SignPage.fetchOffer', data: { slug } });
     }
   };
 
   const handleSign = async () => {
-    if (!slug || !offer) return;
+    if (!slug || !offer) {
+      Logger.warn('Attempted to sign offer with no slug or offer data', { 
+        context: 'SignPage.handleSign',
+        data: { hasSlug: Boolean(slug), hasOffer: Boolean(offer) }
+      });
+      return;
+    }
 
+    Logger.info(`Initiating signing process for offer: ${slug}`, { 
+      context: 'SignPage.handleSign',
+      data: { customerName: offer.customerName }
+    });
+    
     try {
       setSigning(true);
       
@@ -59,13 +87,28 @@ export const SignPage: React.FC = () => {
       
       if (response.error) {
         if (response.status === 409) {
+          Logger.warn(`Attempted to sign already signed offer: ${slug}`, { 
+            context: 'SignPage.handleSign',
+            data: { status: response.status }
+          });
           toast.error('This offer has already been signed');
           // Refresh the offer data
           await fetchOffer();
         } else {
+          Logger.error(`Failed to sign offer: ${response.error}`, undefined, { 
+            context: 'SignPage.handleSign',
+            data: { slug, status: response.status } 
+          });
           toast.error(response.error);
         }
       } else if (response.data) {
+        Logger.info(`Successfully signed offer: ${slug}`, { 
+          context: 'SignPage.handleSign',
+          data: { 
+            customerName: response.data.customerName,
+            signedAt: response.data.signedAt 
+          }
+        });
         toast.success('Offer signed successfully!');
         // Navigate to success page with offer data
         navigate('/success', { 
@@ -76,7 +119,7 @@ export const SignPage: React.FC = () => {
         });
       }
     } catch (err) {
-      console.error('Failed to sign offer:', err);
+      Logger.error('Exception in sign offer process', err as Error, { context: 'SignPage.handleSign' });
       toast.error('Failed to sign offer. Please try again.');
     } finally {
       setSigning(false);

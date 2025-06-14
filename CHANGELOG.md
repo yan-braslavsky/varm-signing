@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+### Added
+- Implemented comprehensive logging system with the new `utils/logger.ts` utility
+- Added detailed data validation for offers to filter out incomplete or invalid data
+- Added error retry functionality in DemoPage with visual feedback
+- Added empty state handling when no offers are available
+- Added better error handling with user-friendly error messages
+
+### Changed
+- Enhanced API calls with structured logging to track request/response cycles
+- Improved DemoPage to use proper loading skeleton components
+- Refactored data fetching logic with better error handling
+- Improved UI feedback with success indicators for data loading
+
 ### Fixed
 - Fixed Firebase hosting configuration in firebase.json to use the correct build output directory (`dist` instead of `web/dist`), resolving GitHub Actions deployment errors.
 - Fixed environment variables issue in GitHub Actions workflows by properly passing Airtable API keys during build process.
