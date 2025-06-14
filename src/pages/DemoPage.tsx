@@ -44,9 +44,9 @@ export const DemoPage: React.FC = () => {
               <div className="h-4 bg-gray-200 rounded w-full"></div>
             </div>
           </div>
-          <div className="grid lg-grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-8">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 animate-pulse">
+              <div key={`skeleton-${i}`} className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 animate-pulse">
                 <div className="h-6 bg-gray-200 rounded mb-4 w-3/4"></div>
                 <div className="h-4 bg-gray-200 rounded mb-3 w-1/2"></div>
                 <div className="h-16 bg-gray-200 rounded mb-4"></div>
@@ -79,12 +79,12 @@ export const DemoPage: React.FC = () => {
         </div>
 
         {/* Offers Grid */}
-        <div className="grid lg-grid-cols-2 gap-8 mb-8">
-          {offers.map((offer) => (
+        <div className="grid lg:grid-cols-2 gap-8 mb-8">
+          {offers.map((offer, index) => (
             <Link
-              key={offer.slug}
-              to={`/sign/${offer.slug}`}
-              className="block bg-white rounded-2xl shadow-lg border border-gray-100 p-6 transition-all hover-scale-102 hover:shadow-xl"
+              key={`offer-${offer.slug || index}`}
+              to={offer.slug ? `/sign/${offer.slug}` : '#'}
+              className="block bg-white rounded-2xl shadow-lg border border-gray-100 p-6 transition-all hover:scale-105 hover:shadow-xl"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-3">
@@ -93,7 +93,7 @@ export const DemoPage: React.FC = () => {
                     <h3 className="text-lg font-semibold text-gray-900">
                       {offer.customerName}
                     </h3>
-                    <p className="text-sm text-gray-600">Slug: {offer.slug}</p>
+                    <p className="text-sm text-gray-600">Slug: {offer.slug || 'Missing'}</p>
                   </div>
                 </div>
                 {offer.isSigned && (
