@@ -7,6 +7,24 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Environment Variables
+
+This project requires certain environment variables to function correctly:
+
+- `VITE_AIRTABLE_BASE_ID`: Your Airtable base ID
+- `VITE_AIRTABLE_API_KEY`: Your Airtable API key
+
+For local development, copy the `.env.example` file to `.env` and fill in your values:
+
+```bash
+cp .env.example .env
+# Now edit .env with your actual values
+```
+
+For deployment with GitHub Actions, set these as repository secrets in your GitHub repo settings.
+
+See [ENV_VARIABLES.md](ENV_VARIABLES.md) for more detailed information.
+
 ## Firebase Cloud Functions
 
 The project includes a simple ping function that returns "pong". This function can be used to verify that cloud functions are working correctly.
