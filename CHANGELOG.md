@@ -29,6 +29,7 @@
 - Enhanced API calls with structured logging to track request/response cycles
 - Improved OffersPage to use proper loading skeleton components
 - Refactored data fetching logic with better error handling
+- Fixed Firebase Functions CI deployment workflow to use GCP service account authentication
 - Improved UI feedback with success indicators for data loading
 
 ### Fixed

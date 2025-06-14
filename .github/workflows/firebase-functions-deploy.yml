@@ -33,5 +33,5 @@ jobs:
         with:
           args: deploy --only functions --no-script
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VARM_55A88 }}
           PROJECT_ID: varm-55a88
