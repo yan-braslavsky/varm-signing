@@ -65,15 +65,15 @@ export const DemoPage: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            VARM Digital Signing Demo
+            VARM Digital Signing Platform
           </h1>
           <p className="text-gray-600 mb-6">
-            Choose an offer to test the digital signing experience
+            Choose an offer to view and complete the digital signing process
           </p>
           <div className="bg-white rounded-xl p-4 shadow-md border border-gray-200">
             <p className="text-sm text-gray-700">
-              <strong>Demo Features:</strong> Realistic API delays, error handling, mobile-responsive design, 
-              loading states, success animations, and comprehensive edge case coverage.
+              <strong>Features:</strong> Secure digital signing, real-time status updates, mobile-responsive design,
+              and instant confirmation upon completion.
             </p>
           </div>
         </div>
@@ -133,7 +133,7 @@ export const DemoPage: React.FC = () => {
         {/* Footer */}
         <div className="text-center mt-8 animate-fade-in">
           <p className="text-sm text-gray-500">
-            © 2024 VARM Digital Signing Platform - Built with React + TypeScript
+            © 2024 VARM Digital Signing Platform - Powered by Airtable
           </p>
         </div>
       </div>
