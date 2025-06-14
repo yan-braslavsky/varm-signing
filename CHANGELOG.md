@@ -10,6 +10,10 @@
   - Updated field name priority to use actual Airtable field names: "Name", "Email", "Offer Amount", "Document URL", "Signed", "Signed At", "Slug"
   - Enhanced error handling with detailed logging for better debugging
   - Added debug scripts to validate Airtable connection and data structure
+- **Currency Formatting**: Fixed OffersPage to display Euro (€) instead of USD ($)
+  - Updated currency formatting in OffersPage from USD to EUR with de-DE locale
+  - Ensured consistent Euro formatting across all pages (OffersPage and SignPage)
+  - All amounts now properly display with Euro symbol (€) and German number formatting
 
 ### Improved
 - **Enhanced error messages for invalid offer links**
@@ -21,7 +25,7 @@
   - Improved connection error messages to be more specific about network issues
 
 ### Added
-- Created debug scripts (`scripts/debug-airtable.js`, `scripts/test-filter.js`, `scripts/test-error-messages.js`) for troubleshooting Airtable integration
+- Created debug scripts (`scripts/debug-airtable.js`, `scripts/test-filter.js`, `scripts/test-error-messages.js`, `scripts/test-currency.js`) for troubleshooting Airtable integration and validating currency formatting
 - Added comprehensive error logging for Airtable API responses
 - Added alternative offer fetching method as fallback for filter formula issues
 - Enhanced ErrorMessage component with `onBack` and `backLabel` props for navigation
