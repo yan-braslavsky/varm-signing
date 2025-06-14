@@ -9,7 +9,7 @@ import {
 import { Toaster } from 'react-hot-toast';
 import { SignPage } from './pages/SignPage';
 import { SuccessPage } from './pages/SuccessPage';
-import { DemoPage } from './pages/DemoPage';
+import { OffersPage } from './pages/OffersPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 // Root layout component that includes common UI elements
@@ -53,11 +53,14 @@ function RootLayout() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<RootLayout />}>
-      {/* Redirect root to demo page */}
-      <Route path="/" element={<Navigate to="/demo" replace />} />
+      {/* Redirect root to offers page */}
+      <Route path="/" element={<Navigate to="/offers" replace />} />
       
-      {/* Demo page with all offers */}
-      <Route path="/demo" element={<DemoPage />} />
+      {/* Offers page with all available offers */}
+      <Route path="/offers" element={<OffersPage />} />
+      
+      {/* Support old demo route for backward compatibility */}
+      <Route path="/demo" element={<Navigate to="/offers" replace />} />
       
       {/* Sign page route */}
       <Route path="/sign/:slug" element={<SignPage />} />
@@ -65,7 +68,7 @@ const router = createBrowserRouter(
       {/* Success page route */}
       <Route path="/success" element={<SuccessPage />} />
       
-      {/* Catch all - redirect to demo */}
+      {/* Catch all - redirect to offers page */}
       <Route path="*" element={<NotFoundPage />} />
     </Route>
   ),

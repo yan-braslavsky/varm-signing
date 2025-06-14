@@ -7,7 +7,7 @@ import { Logger } from '../utils/logger';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { CardSkeleton } from '../components/LoadingSkeleton';
 
-export const DemoPage: React.FC = () => {
+export const OffersPage: React.FC = () => {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +18,7 @@ export const DemoPage: React.FC = () => {
   useEffect(() => {
     const fetchOffers = async () => {
       Logger.info('Initiating data fetch for offers', { 
-        context: 'DemoPage.fetchOffers',
+        context: 'OffersPage.fetchOffers',
         data: { retryAttempt: retryCounter }
       });
       
@@ -28,18 +28,18 @@ export const DemoPage: React.FC = () => {
         if (response.error) {
           setError(response.error);
           Logger.error(`Error in offers response: ${response.error}`, undefined, {
-            context: 'DemoPage.fetchOffers',
+            context: 'OffersPage.fetchOffers',
             data: { status: response.status }
           });
         } else if (!response.data || response.data.length === 0) {
           Logger.warn('No offers found in the response', { 
-            context: 'DemoPage.fetchOffers',
+            context: 'OffersPage.fetchOffers',
             data: response
           });
           setOffers([]);
         } else {
           Logger.info(`Successfully loaded ${response.data.length} offers`, { 
-            context: 'DemoPage.fetchOffers' 
+            context: 'OffersPage.fetchOffers' 
           });
           
           // Log detailed information about each offer for debugging
@@ -58,7 +58,7 @@ export const DemoPage: React.FC = () => {
             
             if (!isValid) {
               Logger.warn('Found invalid offer data', { 
-                context: 'DemoPage.fetchOffers',
+                context: 'OffersPage.fetchOffers',
                 data: {
                   offer,
                   validationResults: {
@@ -77,12 +77,12 @@ export const DemoPage: React.FC = () => {
           
           if (validOffers.length < response.data.length) {
             Logger.warn(`Filtered out ${response.data.length - validOffers.length} invalid offers`, {
-              context: 'DemoPage.fetchOffers'
+              context: 'OffersPage.fetchOffers'
             });
             
             if (validOffers.length === 0) {
               Logger.warn('All offers were filtered out due to validation. Using original data with warnings.', { 
-                context: 'DemoPage.fetchOffers' 
+                context: 'OffersPage.fetchOffers' 
               });
               // If all offers are invalid, use the original data with warnings
               // This is a fallback to ensure users see something rather than nothing
@@ -95,11 +95,11 @@ export const DemoPage: React.FC = () => {
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-        Logger.error('Failed to fetch offers', error as Error, { context: 'DemoPage.fetchOffers' });
+        Logger.error('Failed to fetch offers', error as Error, { context: 'OffersPage.fetchOffers' });
         setError(errorMessage);
       } finally {
         setLoading(false);
-        Logger.info('Completed offers fetch process', { context: 'DemoPage.fetchOffers' });
+        Logger.info('Completed offers fetch process', { context: 'OffersPage.fetchOffers' });
       }
     };
 
@@ -116,7 +116,7 @@ export const DemoPage: React.FC = () => {
 
   // Retry handler for error state
   const handleRetry = () => {
-    Logger.info('Retrying offer fetch', { context: 'DemoPage.handleRetry' });
+    Logger.info('Retrying offer fetch', { context: 'OffersPage.handleRetry' });
     setLoading(true);
     setError(null);
     
@@ -125,7 +125,7 @@ export const DemoPage: React.FC = () => {
   };
   
   if (loading) {
-    Logger.debug('Rendering loading state', { context: 'DemoPage.render' });
+    Logger.debug('Rendering loading state', { context: 'OffersPage.render' });
     return (
       <div className="min-h-screen bg-gray-50 py-8 px-4">
         <div className="max-w-4xl mx-auto">

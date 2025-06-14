@@ -183,11 +183,11 @@ export const SignPage: React.FC = () => {
         <div className="text-center mb-8 animate-fade-in">
           <div className="flex items-center justify-between mb-4">
             <Link 
-              to="/demo" 
+              to="/offers" 
               className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
-              Back to Demo
+              Back to Offers
             </Link>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">

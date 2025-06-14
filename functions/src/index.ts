@@ -44,8 +44,8 @@ const mockOffers: Record<string, Offer> = {
     isSigned: true,
     signedAt: '2024-06-14T10:30:00Z',
   },
-  'demo-offer-789': {
-    slug: 'demo-offer-789',
+  'offer-789': {
+    slug: 'offer-789',
     customerName: 'Alice Johnson',
     offerAmount: 320000,
     pdfUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',

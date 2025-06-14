@@ -25,13 +25,38 @@ const getAirtableHeaders = () => ({
 const transformAirtableRecord = (record: any): Offer => {
   const fields = record.fields || {};
   
-  // Convert offerAmount to a proper number if it exists
+  // Map field names - handle both convention cases:
+  // 1. Fields named exactly like our app (camelCase: customerName, offerAmount, etc.)
+  // 2. Fields named with Airtable convention (Title Case: Name, Amount, etc.)
+  const fieldMap = {
+    // App field name : Possible Airtable field names (in priority order)
+    slug: ['slug', 'Slug', 'ID', 'Id', 'id'],
+    customerName: ['customerName', 'Customer Name', 'Name', 'Client', 'Client Name'],
+    offerAmount: ['offerAmount', 'Offer Amount', 'Amount', 'Value', 'Price'],
+    pdfUrl: ['pdfUrl', 'Pdf Url', 'PDF URL', 'PDF', 'Document URL', 'Document Link', 'Attachment'],
+    isSigned: ['isSigned', 'Is Signed', 'Signed', 'Status'],
+    signedAt: ['signedAt', 'Signed At', 'Sign Date', 'Date Signed']
+  };
+  
+  // Helper function to find the first available field value from possible field names
+  const getFieldValue = (possibleNames: string[], defaultValue: any = null) => {
+    for (const name of possibleNames) {
+      if (fields[name] !== undefined) {
+        return fields[name];
+      }
+    }
+    return defaultValue;
+  };
+  
+  // Convert offerAmount to a proper number
   let offerAmount = 0;
-  if (fields.offerAmount !== undefined) {
-    if (typeof fields.offerAmount === 'string') {
-      offerAmount = parseFloat(fields.offerAmount) || 0;
-    } else if (typeof fields.offerAmount === 'number') {
-      offerAmount = fields.offerAmount;
+  const rawAmount = getFieldValue(fieldMap.offerAmount);
+  
+  if (rawAmount !== null) {
+    if (typeof rawAmount === 'string') {
+      offerAmount = parseFloat(rawAmount) || 0;
+    } else if (typeof rawAmount === 'number') {
+      offerAmount = rawAmount;
     }
   }
   
@@ -40,22 +65,44 @@ const transformAirtableRecord = (record: any): Offer => {
     console.group('Airtable Record Transformation');
     console.log('Record ID:', record.id);
     console.log('Raw fields:', fields);
-    console.log('Field types:', {
-      slug: typeof fields.slug,
-      customerName: typeof fields.customerName,
-      offerAmount: typeof fields.offerAmount,
-      pdfUrl: typeof fields.pdfUrl
+    console.log('Available field names:', Object.keys(fields));
+    console.log('Field mapping used:', {
+      slug: getFieldValue(fieldMap.slug, 'None')?.toString().substring(0, 20) + '...',
+      customerName: getFieldValue(fieldMap.customerName, 'None')?.toString().substring(0, 20) + '...',
+      offerAmount: typeof rawAmount,
+      pdfUrl: getFieldValue(fieldMap.pdfUrl, 'None')?.toString().substring(0, 20) + '...',
+      isSigned: getFieldValue(fieldMap.isSigned, false)
     });
     console.groupEnd();
   }
 
+  // Get the slug - use record ID as fallback if no slug field exists
+  const slug = getFieldValue(fieldMap.slug) || `record-${record.id || 'unknown'}`;
+  
+  // Get customer name with fallback
+  const customerName = getFieldValue(fieldMap.customerName) || 'Unnamed Customer';
+  
+  // Get PDF URL with fallback
+  const pdfUrl = getFieldValue(fieldMap.pdfUrl) || '';
+  
+  // Convert signed status to boolean
+  const signedStatus = getFieldValue(fieldMap.isSigned);
+  const isSigned = typeof signedStatus === 'boolean' ? signedStatus : 
+                  typeof signedStatus === 'string' ? signedStatus.toLowerCase() === 'true' || 
+                                                   signedStatus.toLowerCase() === 'yes' || 
+                                                   signedStatus.toLowerCase() === 'signed' : 
+                  Boolean(signedStatus);
+  
+  // Get signed date
+  const signedAt = getFieldValue(fieldMap.signedAt);
+  
   return {
-    slug: fields.slug || `record-${record.id || 'unknown'}`,
-    customerName: fields.customerName || 'Unnamed Customer',
+    slug: slug,
+    customerName: customerName,
     offerAmount: offerAmount,
-    pdfUrl: fields.pdfUrl || '',
-    isSigned: Boolean(fields.isSigned),
-    signedAt: fields.signedAt,
+    pdfUrl: pdfUrl,
+    isSigned: isSigned,
+    signedAt: signedAt,
   };
 };
 
@@ -167,11 +214,46 @@ export const airtableService = {
 
       // Update the record
       const updateUrl = `${url}/${recordId}`;
+      
+      // Determine which field names to use for the update
+      // First check which fields are present in the record
+      const findFields = findData.records[0].fields;
+      const hasIsSignedField = 'isSigned' in findFields;
+      const hasIsSignedCamelCaseField = 'isSigned' in findFields;
+      const hasSignedField = 'Signed' in findFields;
+      const hasSignedAtField = 'signedAt' in findFields;
+      const hasSignedAtTitleCaseField = 'Signed At' in findFields;
+      
+      // Create update data based on the fields that exist
+      const fields: Record<string, any> = {};
+      
+      // For isSigned field
+      if (hasIsSignedField) {
+        fields.isSigned = true;
+      } else if (hasIsSignedCamelCaseField) {
+        fields.isSigned = true;
+      } else if (hasSignedField) {
+        fields.Signed = true;
+      } else {
+        // If none of the fields exist, use both common formats
+        fields.isSigned = true;
+        fields.Signed = true;
+      }
+      
+      // For signedAt field
+      const nowISOString = new Date().toISOString();
+      if (hasSignedAtField) {
+        fields.signedAt = nowISOString;
+      } else if (hasSignedAtTitleCaseField) {
+        fields['Signed At'] = nowISOString;
+      } else {
+        // If none of the fields exist, use both common formats
+        fields.signedAt = nowISOString;
+        fields['Signed At'] = nowISOString;
+      }
+      
       const updateData = {
-        fields: {
-          isSigned: true,
-          signedAt: new Date().toISOString(),
-        },
+        fields: fields,
       };
 
       const updateResponse = await fetch(updateUrl, {
@@ -202,7 +284,7 @@ export const airtableService = {
   },
 
   /**
-   * Get all offers from Airtable (for admin/demo purposes)
+   * Get all offers from Airtable
    */
   async getAllOffers(): Promise<ApiResponse<Offer[]>> {
     try {
@@ -257,13 +339,26 @@ export const airtableService = {
       validateConfig();
 
       const url = `${AIRTABLE_CONFIG.baseUrl}/${AIRTABLE_CONFIG.baseId}/${AIRTABLE_CONFIG.tableName}`;
+      
+      // Support both camelCase and Title Case field names for better compatibility
       const createData = {
         fields: {
+          // Include both camelCase and Title Case versions to ensure compatibility
+          // with different Airtable base configurations
           slug: offer.slug,
+          Slug: offer.slug,
+          
           customerName: offer.customerName,
+          'Customer Name': offer.customerName,
+          
           offerAmount: offer.offerAmount,
+          'Offer Amount': offer.offerAmount,
+          
           pdfUrl: offer.pdfUrl,
+          'PDF URL': offer.pdfUrl,
+          
           isSigned: false,
+          'Is Signed': false,
         },
       };
 
