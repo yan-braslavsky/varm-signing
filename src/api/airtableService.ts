@@ -358,7 +358,7 @@ export const airtableService = {
                 );
                 
               if (foundVariation) {
-                const [appField, variations] = foundVariation;
+                const [_, variations] = foundVariation;
                 const presentVariation = variations.find(v => v in sampleFields);
                 console.log(`Field '${field}' not found, but alternative '${presentVariation}' is available`);
               } else {

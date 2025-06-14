@@ -183,7 +183,7 @@ describe('Schema Validation', () => {
   
   test('field name variations are case-sensitive for exact matching', () => {
     // Verify that each variation in FIELD_VARIATIONS can be matched
-    Object.entries(FIELD_VARIATIONS).forEach(([appField, fieldVariations]) => {
+    Object.entries(FIELD_VARIATIONS).forEach(([_, fieldVariations]) => {
       fieldVariations.forEach(fieldName => {
         const fields: Record<string, any> = {
           // Set default required fields

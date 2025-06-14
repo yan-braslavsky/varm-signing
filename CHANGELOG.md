@@ -30,6 +30,9 @@
 - Improved OffersPage to use proper loading skeleton components
 - Refactored data fetching logic with better error handling
 - Fixed Firebase Functions CI deployment workflow to use GCP service account authentication
+
+### Fixed
+- Fixed TypeScript compilation errors in airtableService.ts and schemaValidation.test.ts related to unused variables
 - Improved UI feedback with success indicators for data loading
 
 ### Fixed
