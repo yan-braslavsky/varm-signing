@@ -130,35 +130,6 @@ export const DemoPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Features Section */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 animate-fade-in">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            🎯 App Features
-          </h2>
-          <div className="grid grid-cols-1 lg-grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <h3 className="font-medium text-gray-800">Core Functionality</h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Personalized offer display</li>
-                <li>• PDF document viewer</li>
-                <li>• One-click digital signing</li>
-                <li>• Success confirmation page</li>
-                <li>• Mobile-first responsive design</li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <h3 className="font-medium text-gray-800">Technical Features</h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• TypeScript for type safety</li>
-                <li>• Comprehensive error handling</li>
-                <li>• Loading states & animations</li>
-                <li>• Toast notifications</li>
-                <li>• Edge case coverage</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
         {/* Footer */}
         <div className="text-center mt-8 animate-fade-in">
           <p className="text-sm text-gray-500">

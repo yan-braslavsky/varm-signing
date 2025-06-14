@@ -34,20 +34,4 @@ describe('DemoPage', () => {
     // Check if demo features description is present
     expect(screen.getByText(/Realistic API delays, error handling, mobile-responsive design/)).toBeInTheDocument()
   })
-
-  it('shows app features section', async () => {
-    render(
-      <MemoryRouter>
-        <DemoPage />
-      </MemoryRouter>
-    )
-    
-    // Wait for content to load
-    await waitFor(() => {
-      expect(screen.getByText('🎯 App Features')).toBeInTheDocument()
-    }, { timeout: 3000 })
-    
-    expect(screen.getByText('Core Functionality')).toBeInTheDocument()
-    expect(screen.getByText('Technical Features')).toBeInTheDocument()
-  })
 })
