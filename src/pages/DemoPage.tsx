@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { offerApi } from '../api/offerApi';
-import { Offer } from '../types/offer';
+import type { Offer } from '../types/offer.js';
 import { FileText, CheckCircle, DollarSign, ExternalLink } from 'lucide-react';
 
 export const DemoPage: React.FC = () => {

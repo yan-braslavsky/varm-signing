@@ -5,7 +5,7 @@
  * Replace the mock data in offerApi.ts with these functions when ready for production.
  */
 
-import { Offer, ApiResponse } from '../types/offer';
+import type { Offer, ApiResponse } from '../types/offer.js';
 
 // Airtable configuration
 const AIRTABLE_CONFIG = {

@@ -1,4 +1,4 @@
-import { Offer, ApiResponse, SignRequest } from '../types/offer';
+import type { Offer, ApiResponse, SignRequest } from '../types/offer.js';
 
 // Mock data for development - in production this would call Firebase Functions
 const mockOffers: Record<string, Offer> = {
@@ -75,7 +75,7 @@ export const offerApi = {
     };
   },
 
-  async signOffer(slug: string, signRequest: SignRequest = {}): Promise<ApiResponse<Offer>> {
+  async signOffer(slug: string, _signRequest: SignRequest = {}): Promise<ApiResponse<Offer>> {
     await delay(800 + Math.random() * 400); // Random delay 800-1200ms
     
     // Simulate occasional network errors

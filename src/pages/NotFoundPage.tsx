@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FileX, Home, ArrowLeft } from 'lucide-react';
+import { FileX, Home } from 'lucide-react';
 
 export const NotFoundPage: React.FC = () => {
   return (

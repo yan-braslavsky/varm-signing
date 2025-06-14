@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { ArrowLeft } from 'lucide-react';
-import { Offer } from '../types/offer';
+import type { Offer } from '../types/offer.js';
 import { offerApi } from '../api/offerApi';
 import { OfferCard } from '../components/OfferCard';
 import { SignButton } from '../components/SignButton';

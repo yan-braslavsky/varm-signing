@@ -1,6 +1,6 @@
 import React from 'react';
-import { Offer } from '../types/offer';
-import { DollarSign, Calendar, CheckCircle } from 'lucide-react';
+import type { Offer } from '../types/offer.js';
+import { DollarSign, CheckCircle } from 'lucide-react';
 
 interface OfferCardProps {
   offer: Offer;
