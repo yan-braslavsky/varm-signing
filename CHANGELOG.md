@@ -3,8 +3,10 @@
 ## Unreleased - 2025-06-15
 
 ### Added
-- **Cloud Functions API Layer**: Implemented Firebase Cloud Functions as the REST API layer
+- **Cloud Functions API Layer**: Deployed Firebase Cloud Functions as the REST API layer
   - Created a modular Cloud Functions architecture with proper separation of concerns
+  - Configured Firebase Functions with Airtable API credentials and secure API key
+  - Successfully deployed Cloud Functions to Firebase with Node.js 20
   - Added `restApiService.ts` for communicating with Cloud Functions API
   - Implemented server-side Airtable integration to secure API keys
   - Added support for environment variable `VITE_API_BASE_URL` to configure API endpoint

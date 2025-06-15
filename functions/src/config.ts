@@ -22,6 +22,9 @@ export const API_CONFIG = {
   // API key for simple API key authentication (can be set using firebase functions:config:set api.key=your-secret-key)
   apiKey: apiConfig.key,
   
+  // Base URL for the API
+  baseUrl: apiConfig.baseurl || 'https://us-central1-varm-55a88.cloudfunctions.net',
+  
   // List of allowed origins for CORS
   allowedOrigins: [
     "http://localhost:5174",
