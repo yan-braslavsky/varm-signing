@@ -13,6 +13,7 @@
   - Replaced direct npx commands with the recommended w9jds/firebase-action
   - Streamlined the workflow by removing duplicate setup steps
   - Added proper Node.js setup with caching for faster builds
+  - Switched from FIREBASE_TOKEN to GCP_SA_KEY for more secure authentication
   - Successfully deployed Cloud Functions to Firebase with Node.js 20
   - Added `restApiService.ts` for communicating with Cloud Functions API
   - Implemented server-side Airtable integration to secure API keys
