@@ -3,11 +3,23 @@
  * Contains environment configuration and constants
  */
 
-import * as functions from "firebase-functions";
+import { defineSecret } from "firebase-functions/params";
 
-// Get config from Firebase environment
-const airtableConfig = functions.config().airtable || {};
-const apiConfig = functions.config().api || {};
+// Define secrets for v2 functions
+export const AIRTABLE_BASE_ID = defineSecret("AIRTABLE_BASE_ID");
+export const AIRTABLE_API_KEY = defineSecret("AIRTABLE_API_KEY");
+export const API_KEY = defineSecret("API_KEY");
+export const API_BASEURL = defineSecret("API_BASEURL");
+
+// Get config from Firebase environment (now from secrets)
+const airtableConfig = {
+  base_id: process.env.AIRTABLE_BASE_ID,
+  api_key: process.env.AIRTABLE_API_KEY
+};
+const apiConfig = {
+  key: process.env.API_KEY,
+  baseurl: process.env.API_BASEURL
+};
 
 // Airtable configuration - using only Firebase config
 export const AIRTABLE_CONFIG = {

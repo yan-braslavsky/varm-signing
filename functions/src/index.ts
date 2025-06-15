@@ -8,6 +8,7 @@ import * as admin from "firebase-admin";
 import * as logger from "firebase-functions/logger";
 import { getOffer, signOffer, getAllOffers } from "./handlers/offerHandlers";
 import { verifyApiKey } from "./middleware/authMiddleware";
+import { AIRTABLE_BASE_ID, AIRTABLE_API_KEY, API_KEY, API_BASEURL } from "./config";
 
 // Initialize Firebase Admin SDK
 admin.initializeApp();
@@ -17,7 +18,8 @@ export const ping = onRequest({
   timeoutSeconds: 30,
   region: "us-central1", 
   memory: "256MiB",
-  cors: true
+  cors: true,
+  secrets: [API_KEY, AIRTABLE_BASE_ID, AIRTABLE_API_KEY, API_BASEURL],
 }, (request, response) => {
   logger.info("Ping function called", {structuredData: true});
   response.json({
@@ -32,7 +34,8 @@ export const api = onRequest({
   timeoutSeconds: 60,
   region: "us-central1",
   memory: "256MiB",
-  cors: true
+  cors: true,
+  secrets: [API_KEY, AIRTABLE_BASE_ID, AIRTABLE_API_KEY, API_BASEURL],
 }, (request, response) => {
   const path = request.path || '';
   
