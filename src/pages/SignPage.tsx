@@ -324,12 +324,12 @@ export const SignPage: React.FC = () => {
               <PDFViewer url={offer.documentURL || offer.pdfUrl} />
             ) : (
               <div className="bg-white rounded-xl shadow-md p-6">
-                <h2 className="text-lg font-semibold mb-4 text-gray-900">Offer Document</h2>
+                <h2 className="text-lg font-semibold mb-4 text-gray-900">Angebotsdokument</h2>
                 <div className="bg-gray-50 rounded-lg p-8 text-center">
                   <div className="text-gray-400 text-4xl mb-3">📄</div>
-                  <p className="text-gray-600 font-medium">Document not available</p>
+                  <p className="text-gray-600 font-medium">Dokument nicht verfügbar</p>
                   <p className="text-gray-500 text-sm mt-1">
-                    The document will be available after processing
+                    Das Dokument wird nach der Verarbeitung verfügbar sein
                   </p>
                 </div>
               </div>

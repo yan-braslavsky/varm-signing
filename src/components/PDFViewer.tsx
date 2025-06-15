@@ -26,12 +26,12 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ url, className = '' }) => 
   if (!processedUrl || processedUrl.trim() === '') {
     return (
       <div className={`bg-white rounded-xl shadow-md p-4 ${className}`}>
-        <h2 className="text-lg font-semibold mb-3 text-gray-900">Offer Document</h2>
+        <h2 className="text-lg font-semibold mb-3 text-gray-900">Angebotsdokument</h2>
         <div className="bg-gray-50 rounded-md p-8 text-center">
           <div className="text-gray-400 text-4xl mb-3">📄</div>
-          <p className="text-gray-600 font-medium">Document not available</p>
+          <p className="text-gray-600 font-medium">Dokument nicht verfügbar</p>
           <p className="text-gray-500 text-sm mt-1">
-            The document will be available after processing
+            Das Dokument wird nach der Verarbeitung verfügbar sein
           </p>
         </div>
       </div>
@@ -40,21 +40,21 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ url, className = '' }) => 
 
   return (
     <div className={`bg-white rounded-xl shadow-md p-4 ${className}`}>
-      <h2 className="text-lg font-semibold mb-3 text-gray-900">Offer Document</h2>
+      <h2 className="text-lg font-semibold mb-3 text-gray-900">Angebotsdokument</h2>
       
       {isLoading && (
         <div className="bg-gray-50 rounded-md p-8 text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-3"></div>
-          <p className="text-gray-600">Loading document...</p>
+          <p className="text-gray-600">Dokument wird geladen...</p>
         </div>
       )}
 
       {hasError && (
         <div className="bg-red-50 rounded-md p-8 text-center">
           <div className="text-red-400 text-4xl mb-3">⚠️</div>
-          <p className="text-red-800 font-medium">Document could not be loaded</p>
+          <p className="text-red-800 font-medium">Dokument konnte nicht geladen werden</p>
           <p className="text-red-600 text-sm mt-1">
-            Please check your connection or try again later
+            Bitte überprüfen Sie Ihre Verbindung oder versuchen Sie es später erneut
           </p>
           <a 
             href={processedUrl} 
@@ -62,7 +62,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ url, className = '' }) => 
             rel="noopener noreferrer" 
             className="inline-block mt-3 text-blue-600 hover:text-blue-800 underline text-sm"
           >
-            Open in new tab
+            In neuem Tab öffnen
           </a>
         </div>
       )}
@@ -70,7 +70,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ url, className = '' }) => 
       <div className={`${isLoading || hasError ? 'hidden' : 'block'}`}>
         <iframe
           src={processedUrl}
-          title="Offer PDF"
+          title="Angebots-PDF"
           className="w-full h-[600px] border rounded-md"
           onLoad={handleLoad}
           onError={handleError}
@@ -84,7 +84,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ url, className = '' }) => 
             rel="noopener noreferrer" 
             className="text-blue-600 hover:text-blue-800 underline text-sm"
           >
-            Download PDF
+            PDF herunterladen
           </a>
         </div>
       </div>
