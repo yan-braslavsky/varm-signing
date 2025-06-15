@@ -11,6 +11,16 @@
   - All page content now renders between sticky header and footer for consistent navigation
 
 ### Changed
+- **SuccessPage Navigation Enhancement**: Improved user experience by navigating back to signed offer instead of offers list
+  - Updated SignPage to pass offer slug to SuccessPage navigation state
+  - Modified SuccessPage to navigate back to specific signed offer (`/sign/{slug}`) instead of offers list
+  - Changed button text from "Zurück zu Angeboten" to "Zurück zum Angebot" when offer slug is available
+  - Falls back to offers list navigation if no offer slug is provided for backward compatibility
+- **SuccessPage Translation**: Completed German localization for success page
+  - Translated "Thank you! Your offer has been signed." to "Vielen Dank! Ihr Angebot wurde unterzeichnet."
+  - Translated "on {date}" to "am {date}" with German date formatting (de-DE locale)
+  - Translated "Back to Offers" button to "Zurück zu Angeboten"
+  - Updated date formatting from en-US to de-DE for consistent German localization
 - **Footer Translation Completion**: Finalized German translation for all footer content
   - Translated copyright notice from "All rights reserved" to "Alle Rechte vorbehalten"
   - Translated credit line from "Made with ❤️ for the planet" to "Mit ❤️ für den Planeten erstellt"

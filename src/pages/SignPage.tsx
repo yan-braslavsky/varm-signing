@@ -121,7 +121,8 @@ export const SignPage: React.FC = () => {
         navigate('/success', { 
           state: { 
             customerName: response.data.customerName,
-            signedAt: response.data.signedAt 
+            signedAt: response.data.signedAt,
+            offerSlug: slug
           } 
         });
       }

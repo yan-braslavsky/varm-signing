@@ -5,6 +5,7 @@ import { PrimaryButton } from '../components/PrimaryButton';
 interface SuccessPageState {
   customerName: string;
   signedAt?: string;
+  offerSlug?: string;
 }
 
 export const SuccessPage: React.FC = () => {
@@ -19,13 +20,13 @@ export const SuccessPage: React.FC = () => {
 
   const formatDate = (dateString?: string) => {
     if (!dateString) {
-      return new Date().toLocaleDateString('en-US', {
+      return new Date().toLocaleDateString('de-DE', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
       });
     }
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('de-DE', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -58,18 +59,24 @@ export const SuccessPage: React.FC = () => {
 
           {/* Title */}
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Thank you! Your offer has been signed.
+            Vielen Dank! Ihr Angebot wurde unterzeichnet.
           </h2>
 
           {/* Date */}
           <p className="text-gray-600 mb-8">
-            on {formatDate(state.signedAt)}
+            am {formatDate(state.signedAt)}
           </p>
         </div>
 
         {/* Back Button */}
-        <PrimaryButton onClick={() => navigate('/offers')}>
-          Back to Offers
+        <PrimaryButton onClick={() => {
+          if (state.offerSlug) {
+            navigate(`/sign/${state.offerSlug}`);
+          } else {
+            navigate('/offers');
+          }
+        }}>
+          {state.offerSlug ? 'Zurück zum Angebot' : 'Zurück zu Angeboten'}
         </PrimaryButton>
       </div>
     </div>
