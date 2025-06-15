@@ -14,6 +14,13 @@
   - Enhanced error handling with standardized error responses and detailed logging
   - Improved test coverage using proper mocking for API layers
 
+### Fixed
+- **Test Suite Compatibility**: Updated tests to work with the new API-only approach
+  - Created mock for removed `airtableService.ts` to maintain backward compatibility with existing tests
+  - Updated import paths in test files to use mock services
+  - Fixed type import syntax to comply with verbatimModuleSyntax TypeScript setting
+  - Removed unused imports to clean up the codebase
+
 ### Changed
 - **API Security Enhancement**: Moved Airtable interactions to server-side
   - Refactored `offerApi.ts` to use either REST API or direct Airtable access

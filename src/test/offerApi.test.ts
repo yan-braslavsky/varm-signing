@@ -1,9 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { offerApi } from '../api/offerApi'
-import * as restApiServiceModule from '../api/restApiService'
 import { mockRestApiService } from './mocks/restApiService.mock'
 
-// Mock the restApiService
+// Fix duplicate mock declaration
 vi.mock('../api/restApiService', () => ({
   restApiService: mockRestApiService
 }))
