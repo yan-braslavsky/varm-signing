@@ -11,6 +11,20 @@
   - All page content now renders between sticky header and footer for consistent navigation
 
 ### Changed
+- **SignPage User Experience Enhancement**: Improved signing workflow with German localization and better signed offer handling
+  - **Added German Instructions**: Added prominent blue information box at top with complete German instructions
+    - "Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an."
+    - "Hast du Fragen? Ruf uns gerne an oder schreib uns."
+    - "Wenn alles passt, klicke auf 'Angebot annehmen & absenden'."
+  - **Removed Notes Section**: Cleaned up interface by removing notes display from offer details
+  - **Enhanced Signed Offer UI**: Improved visual presentation for already signed offers
+    - Larger green success icon (16x16 instead of 12x12)
+    - German text: "Angebot bereits unterzeichnet" and "Vielen Dank für Ihre Unterschrift!"
+    - Clear signed date display within the success component
+    - German button text: "Zurück zu den Angeboten"
+  - **Updated Button Text**: Changed signing button to German "Angebot annehmen & absenden"
+  - **Loading State Text**: Updated loading text to "Angebot wird abgesendet..."
+  - **Airtable Integration**: Signing process properly updates both "Signed" and "Signed At" fields in Airtable
 - **SignPage Enhanced Details**: Incorporated comprehensive offer details from OffersPage cards into SignPage
   - **Unified Design System**: Applied same professional Lucide React icons used in OffersPage
     - Mail icon for customer email display

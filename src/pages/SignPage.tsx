@@ -13,7 +13,6 @@ import {
   Hash, 
   MapPin, 
   Euro, 
-  FileCheck, 
   Clock, 
   CheckCircle2, 
   Clock3 
@@ -206,8 +205,18 @@ export const SignPage: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         {/* Page Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Sign and Accept Offer</h1>
-          <p className="text-gray-600">Review the offer details and complete the digital signing process</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Sign and Accept Offer</h1>
+          <div className="max-w-2xl mx-auto bg-blue-50 rounded-xl p-6 mb-6">
+            <p className="text-gray-800 text-base leading-relaxed mb-3">
+              Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an.
+            </p>
+            <p className="text-gray-800 text-base leading-relaxed mb-3">
+              Hast du Fragen? Ruf uns gerne an oder schreib uns.
+            </p>
+            <p className="text-gray-800 text-base leading-relaxed font-medium">
+              Wenn alles passt, klicke auf „Angebot annehmen & absenden".
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -275,12 +284,6 @@ export const SignPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Notes/Description */}
-              <div className="mb-4 text-sm text-gray-600 flex items-start">
-                <FileCheck className="w-4 h-4 mr-1.5 mt-0.5 flex-shrink-0" />
-                <span>{offer.notes || 'Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an. Wenn alles passt, klicke auf „Angebot annehmen".'}</span>
-              </div>
-
               {/* Signed Date - only show if offer is signed */}
               {offer.isSigned && offer.signedAt && (
                 <div className="mb-4 text-sm text-gray-500 flex items-center p-3 bg-green-50 rounded-lg">
@@ -290,7 +293,7 @@ export const SignPage: React.FC = () => {
               )}
             </Card>
 
-            {/* Sign Button */}
+            {/* Sign Button or Signed Status */}
             {!offer.isSigned ? (
               <PrimaryButton
                 onClick={handleSign}
@@ -298,17 +301,21 @@ export const SignPage: React.FC = () => {
                 disabled={signing}
                 className="w-full"
               >
-                {signing ? 'Signing...' : 'Sign and Accept Offer'}
+                {signing ? 'Angebot wird abgesendet...' : 'Angebot annehmen & absenden'}
               </PrimaryButton>
             ) : (
-              <div className="text-center">
-                <div className="bg-green-50 rounded-2xl p-6 mb-4">
-                  <CheckCircle2 className="w-12 h-12 mx-auto text-green-500 mb-3" />
-                  <p className="text-green-800 font-semibold text-lg mb-1">Already Signed</p>
-                  <p className="text-green-600 text-sm">Thank you for your signature!</p>
+              <div className="bg-green-50 rounded-2xl p-6 text-center">
+                <CheckCircle2 className="w-16 h-16 mx-auto text-green-500 mb-4" />
+                <h3 className="text-xl font-bold text-green-800 mb-2">Angebot bereits unterzeichnet</h3>
+                <p className="text-green-700 mb-4">
+                  Vielen Dank für Ihre Unterschrift! Das Angebot wurde erfolgreich abgesendet.
+                </p>
+                <div className="text-sm text-green-600 mb-4 flex items-center justify-center">
+                  <Clock className="w-4 h-4 mr-1.5" />
+                  <span>Unterzeichnet am: {new Date(offer.signedAt!).toLocaleDateString('de-DE')}</span>
                 </div>
                 <PrimaryButton onClick={() => navigate('/offers')} className="w-full">
-                  Back to Offers
+                  Zurück zu den Angeboten
                 </PrimaryButton>
               </div>
             )}
