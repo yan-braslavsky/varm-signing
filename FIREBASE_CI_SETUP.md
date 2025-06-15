@@ -19,6 +19,20 @@ The CI/CD pipeline uses the Firebase service account key for authentication, whi
 7. Value: Paste the entire contents of the downloaded JSON file
 8. Click "Add secret"
 
+#### Required IAM Permissions
+
+The service account needs proper IAM roles to deploy functions:
+
+1. Go to [IAM & Admin > IAM](https://console.cloud.google.com/iam-admin/iam?project=varm-55a88)
+2. Find the service account being used (usually `github-action-<number>@varm-55a88.iam.gserviceaccount.com`)
+3. Click the edit (pencil) icon for that service account
+4. Add the following roles:
+   - Firebase Admin
+   - Cloud Functions Admin
+   - Service Account User
+   - Cloud Build Service Account
+5. Click "Save"
+
 ### Alternative: Using Firebase CI Token (Legacy)
 
 If you prefer to use a Firebase CI token instead:
