@@ -35,6 +35,7 @@
     "functions:dev": "cd functions && npm run build:watch",
     "emulators": "npm run dev & firebase emulators:start --only auth,functions,firestore,database,hosting,storage,extensions",
     "emulators:functions": "firebase emulators:start --only functions",
+    "emulators:clean": "lsof -i :5174 -t | xargs kill -9 2>/dev/null; lsof -i :5001 -t | xargs kill -9 2>/dev/null; lsof -i :8080 -t | xargs kill -9 2>/dev/null; lsof -i :8090 -t | xargs kill -9 2>/dev/null; lsof -i :9000 -t | xargs kill -9 2>/dev/null; npm run emulators",
     "test:build": "npm run build && npm run preview",
     "clean": "rm -rf dist && rm -rf functions/lib && rm -rf coverage",
     "validate:airtable": "node -r dotenv/config scripts/validate-airtable.js"
