@@ -7,6 +7,7 @@ export interface Offer {
   pdfUrl: string; // Keep for backward compatibility
   isSigned: boolean;
   signedAt?: string;
+  projectAddress?: string; // Added for project address
 }
 
 export interface ApiResponse<T> {

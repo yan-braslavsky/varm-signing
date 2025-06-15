@@ -9,6 +9,18 @@
   - Added new `Footer` component with branding, quick links, and legal information
   - Updated `App.tsx` RootLayout to include header and footer on all pages
   - All page content now renders between sticky header and footer for consistent navigation
+
+### Changed
+- **Offer Card Layout**: Redesigned offer cards with improved German localization and better visual hierarchy
+  - Restructured layout to match specified design with header, project info, offer info, and call-to-action sections
+  - Added German text labels: "🆔 Slug", "📍 Projektadresse", "💶 Festpreisangebot", "📝 Bitte schau dir in Ruhe alle Details..."
+  - Improved status indicators with distinct styling for signed (✅ Signed) vs pending (📋 Pending) offers
+  - Enhanced typography with stronger font weights and better spacing
+  - Added emoji icons for better visual recognition of different sections
+  - Improved date formatting using German locale (de-DE) for signed dates
+  - **Integrated real project addresses from Airtable**: Now displays actual German addresses from the Address field
+  - Extended Offer type and Airtable field mapping to support projectAddress field
+  - Reduced card max-width and optimized padding for better mobile experience
   - Removed redundant page-specific headers and footers from individual pages
   - Updated all "Back to VARM" buttons to navigate to offers page using React Router
 

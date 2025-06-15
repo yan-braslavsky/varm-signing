@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { offerApi } from '../api/offerApi';
 import type { Offer, ApiResponse } from '../types/offer.js';
-import { FileText, CheckCircle, Euro, ExternalLink } from 'lucide-react';
+import { FileText, CheckCircle } from 'lucide-react';
 import { Logger } from '../utils/logger';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { CardSkeleton } from '../components/LoadingSkeleton';
@@ -58,6 +58,9 @@ export const OffersPage: React.FC = () => {
             // Email is optional in our app but required in the schema
             const hasEmail = Boolean(offer.customerEmail);
             
+            // Project address is optional but nice to have
+            const hasAddress = Boolean(offer.projectAddress);
+            
             // Core requirements for displaying an offer card
             const isValid = hasSlug && hasName && hasValidAmount && hasValidPdfUrl;
             
@@ -79,6 +82,7 @@ export const OffersPage: React.FC = () => {
                     hasSlug,
                     hasName,
                     hasEmail,
+                    hasAddress,
                     hasValidAmount,
                     hasValidPdfUrl,
                     offerAmountType: typeof offer.offerAmount,
@@ -218,50 +222,71 @@ export const OffersPage: React.FC = () => {
             <Link
               key={`offer-${offer.slug || index}`}
               to={offer.slug ? `/sign/${offer.slug}` : '#'}
-              className="block bg-white rounded-2xl shadow-md border border-gray-100 p-6 transition-all duration-200 hover:shadow-lg hover:scale-105"
+              className="block bg-white rounded-2xl shadow-md border border-gray-100 max-w-md p-5 transition-all duration-200 hover:shadow-lg hover:scale-105"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <FileText className="w-6 h-6 text-emerald-600" />
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {offer.customerName}
-                    </h3>
-                    {offer.customerEmail && (
-                      <p className="text-sm text-gray-500">{offer.customerEmail}</p>
-                    )}
-                    <p className="text-sm text-gray-600">Slug: {offer.slug || 'Missing'}</p>
-                  </div>
+              {/* Header */}
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">
+                    {offer.customerName}
+                  </h3>
+                  {offer.customerEmail && (
+                    <div className="flex items-center text-sm text-gray-500">
+                      <span className="mr-1.5">📧</span>
+                      <span>{offer.customerEmail}</span>
+                    </div>
+                  )}
                 </div>
-                {offer.isSigned && (
-                  <div className="flex items-center space-x-1 px-2 py-1 bg-green-50 text-green-800 rounded-full text-xs font-medium">
-                    <CheckCircle className="w-3 h-3" />
-                    <span>Signed</span>
-                  </div>
+                {offer.isSigned ? (
+                  <span className="px-2.5 py-1 bg-green-100 text-green-700 font-semibold text-sm rounded-xl">
+                    ✅ Signed
+                  </span>
+                ) : (
+                  <span className="px-2.5 py-1 bg-yellow-100 text-yellow-700 font-semibold text-sm rounded-xl">
+                    📋 Pending
+                  </span>
                 )}
               </div>
 
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                  <Euro className="w-5 h-5 text-emerald-600" />
-                  <div>
-                    <p className="text-sm text-gray-600">Offer Amount</p>
-                    <p className="text-lg font-bold text-gray-900">
-                      {formatAmount(offer.offerAmount)}
-                    </p>
+              {/* Project Info */}
+              <div className="mb-5">
+                <div className="text-sm text-gray-600 mb-1">🆔 Slug:</div>
+                <div className="font-medium">{offer.slug || 'Missing'}</div>
+                
+                {/* Project address from Airtable */}
+                <div className="mt-3">
+                  <div className="text-sm text-gray-600 mb-1">📍 Projektadresse:</div>
+                  <div className="font-medium">
+                    {offer.projectAddress || 'Adresse nicht verfügbar'}
                   </div>
                 </div>
-
-                {offer.signedAt && (
-                  <div className="text-xs text-gray-500">
-                    Signed: {new Date(offer.signedAt).toLocaleDateString()}
-                  </div>
-                )}
               </div>
 
-              <div className="mt-4 flex items-center text-primary-600 text-sm font-medium">
+              {/* Offer Info */}
+              <div className="mb-4 p-3 bg-gray-50 rounded-xl">
+                <div className="text-sm text-gray-700 mb-1">💶 Festpreisangebot</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  {formatAmount(offer.offerAmount)}
+                </div>
+              </div>
+
+              {/* Info Text */}
+              <div className="mb-3 text-sm text-gray-500">
+                📝 Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an.  
+                Wenn alles passt, klicke auf „Angebot ansehen".
+              </div>
+
+              {/* Signed At */}
+              {offer.signedAt && (
+                <div className="mb-4 text-sm text-gray-500">
+                  🕒 Signed on: {new Date(offer.signedAt).toLocaleDateString('de-DE')}
+                </div>
+              )}
+
+              {/* View Offer */}
+              <div className="flex items-center font-semibold text-emerald-700 text-sm">
+                <span className="mr-1">📄</span>
                 <span>View Offer</span>
-                <ExternalLink className="w-4 h-4 ml-2" />
               </div>
             </Link>
           )))}

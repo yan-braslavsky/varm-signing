@@ -78,5 +78,6 @@ export const FIELD_VARIATIONS = {
   offerAmount: ['Offer Amount', 'offerAmount', 'Amount', 'Value'],
   pdfUrl: ['Document URL', 'documentURL', 'DocumentURL', 'pdfUrl', 'PDF URL'],
   isSigned: ['Signed', 'signed', 'isSigned', 'Is Signed'],
-  signedAt: ['Signed At', 'signedAt', 'Sign Date', 'Date Signed']
+  signedAt: ['Signed At', 'signedAt', 'Sign Date', 'Date Signed'],
+  projectAddress: ['Address', 'address', 'projectAddress', 'Project Address', 'Projektadresse']
 };
