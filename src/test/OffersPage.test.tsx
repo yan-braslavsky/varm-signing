@@ -13,7 +13,7 @@ describe('OffersPage', () => {
     
     // Wait for the content to load (after the loading skeleton)
     await waitFor(() => {
-      expect(screen.getByText('VARM Digital Signing Platform')).toBeInTheDocument()
+      expect(screen.getByText('Digital Signing Platform')).toBeInTheDocument()
     }, { timeout: 3000 })
     
     expect(screen.getByText('Choose an offer to view and complete the digital signing process')).toBeInTheDocument()

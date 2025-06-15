@@ -152,7 +152,7 @@ export const OffersPage: React.FC = () => {
   if (loading) {
     Logger.debug('Rendering loading state', { context: 'OffersPage.render' });
     return (
-      <div className="min-h-screen bg-gray-50 py-4 px-4 sm:py-8 sm:px-6">
+      <div className="bg-gray-50 py-8 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8 animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-64 mx-auto mb-2"></div>
@@ -172,12 +172,12 @@ export const OffersPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 px-4 sm:py-8 sm:px-6">
+    <div className="bg-gray-50 py-8 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-            VARM Digital Signing Platform
+            Digital Signing Platform
           </h1>
           <p className="text-gray-600 mb-6">
             Choose an offer to view and complete the digital signing process
@@ -265,13 +265,6 @@ export const OffersPage: React.FC = () => {
               </div>
             </Link>
           )))}
-        </div>
-
-        {/* Footer */}
-        <div className="text-center mt-8 animate-fade-in">
-          <p className="text-xs sm:text-sm text-gray-500">
-            © 2024 VARM Digital Signing Platform - Powered by Airtable
-          </p>
         </div>
       </div>
     </div>

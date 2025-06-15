@@ -130,11 +130,8 @@ export const SignPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
+      <div className="bg-white px-3 sm:px-6 py-6">
         <div className="max-w-md mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
-          </div>
           <Card>
             <div className="animate-pulse">
               <div className="h-4 bg-gray-200 rounded mb-4"></div>
@@ -149,11 +146,8 @@ export const SignPage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
+      <div className="bg-white px-3 sm:px-6 py-6">
         <div className="max-w-md mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
-          </div>
           <ErrorMessage
             title="Offer Not Found"
             message={error}
@@ -169,11 +163,8 @@ export const SignPage: React.FC = () => {
 
   if (!offer) {
     return (
-      <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
+      <div className="bg-white px-3 sm:px-6 py-6">
         <div className="max-w-md mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
-          </div>
           <ErrorMessage
             title="Offer Not Found"
             message="The requested offer could not be found. Please check the link or contact support if you believe this is an error."
@@ -187,12 +178,11 @@ export const SignPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
+    <div className="bg-white px-3 sm:px-6 py-6">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
+        {/* Page Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">VARM</h1>
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Sign and Accept</h2>
+          <h1 className="text-xl font-semibold text-gray-900 mb-4">Sign and Accept</h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -227,8 +217,8 @@ export const SignPage: React.FC = () => {
                   <p className="text-green-800 font-semibold">Already Signed</p>
                   <p className="text-green-600 text-sm">Thank you for your signature!</p>
                 </div>
-                <PrimaryButton onClick={() => window.location.href = '/'}>
-                  Back to VARM
+                <PrimaryButton onClick={() => navigate('/offers')}>
+                  Back to Offers
                 </PrimaryButton>
               </div>
             )}

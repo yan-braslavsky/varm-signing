@@ -1,9 +1,20 @@
 # Changelog
 
-## Unreleased - 2025-06-14
+## Unreleased - 2025-06-15
 
 ### Added
-- **PDF Document Viewer**: Implemented PDF viewer component for offer documents
+- **Navigation Layout**: Implemented site-wide header and footer navigation
+  - Added new `Header` component with VARM logo and navigation to offers page
+  - Clicking VARM logo in header returns user to offers page from any location
+  - Added new `Footer` component with branding, quick links, and legal information
+  - Updated `App.tsx` RootLayout to include header and footer on all pages
+  - All page content now renders between sticky header and footer for consistent navigation
+  - Removed redundant page-specific headers and footers from individual pages
+  - Updated all "Back to VARM" buttons to navigate to offers page using React Router
+
+## 2025-06-14
+
+### Added
   - Added new `PDFViewer` component with iframe-based PDF display
   - Mobile-friendly design with responsive layout for desktop and mobile
   - Fallback handling for missing or invalid PDF URLs with user-friendly error messages
@@ -60,6 +71,37 @@
 - Added alternative offer fetching method as fallback for filter formula issues
 - Enhanced ErrorMessage component with `onBack` and `backLabel` props for navigation
 - Added responsive button layout (stacked on mobile, side-by-side on desktop) in ErrorMessage component
+
+## v1.3.0 - 2025-06-15
+
+### Added
+- **Navigation Architecture**: Implemented comprehensive site-wide navigation system
+  - Created `Header.tsx` component with VARM branding and logo navigation
+  - Created `Footer.tsx` component with professional branding, quick links, and climate-tech tagline  
+  - Added responsive design with mobile-first approach
+  - Integrated header and footer into `App.tsx` RootLayout for consistent navigation
+
+### Changed
+- **Page Layout Refactoring**: Updated all pages to work with new navigation architecture
+  - **OffersPage**: Removed redundant footer and page-specific headers
+  - **SignPage**: Removed duplicate VARM branding, updated navigation buttons  
+  - **SuccessPage**: Removed redundant header, updated "Back to VARM" to "Back to Offers"
+  - **NotFoundPage**: Adjusted layout padding to work with new header/footer structure
+- **Navigation Consistency**: Standardized all navigation to use React Router instead of `window.location.href`
+- **Button Text**: Changed "Back to VARM" to "Back to Offers" across all pages for clarity
+- **Responsive Design**: Maintained mobile-first responsive design patterns throughout
+
+### Fixed
+- **Test Issues**: Fixed failing test in `offerApi.test.ts`
+  - Updated "should sign an offer successfully" test to use `offer004` instead of `offer003`
+  - Added 409 status code to expected status codes to handle "already signed" scenario
+  - Added proper error handling for 409 status in test assertions
+- **OffersPage Test**: Updated test to match new page title structure (removed "VARM" from title check)
+
+### Architecture
+- **Layout Structure**: Implemented flexbox layout with `min-h-screen flex flex-col` for proper footer positioning
+- **Component Reusability**: Created modular header and footer components for consistent branding
+- **User Experience**: Enhanced navigation flow with clear visual hierarchy and intuitive button placement
 
 ## v1.2.0 - 2025-06-14
 
