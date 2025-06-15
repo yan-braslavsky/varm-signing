@@ -312,11 +312,7 @@ export const SignPage: React.FC = () => {
               >
                 {signing ? 'Angebot wird abgesendet...' : 'Angebot annehmen & absenden'}
               </PrimaryButton>
-            ) : (
-              <PrimaryButton onClick={() => navigate('/offers')} className="w-full">
-                Zurück zu den Angeboten
-              </PrimaryButton>
-            )}
+            ) : null}
           </div>
 
           {/* PDF Document Viewer */}

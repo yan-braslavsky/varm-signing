@@ -13,8 +13,8 @@ export const SuccessPage: React.FC = () => {
   const navigate = useNavigate();
   const state = location.state as SuccessPageState;
 
-  // Redirect to home if no state is provided
-  if (!state || !state.customerName) {
+  // Redirect to home if no state is provided or if accessing directly without proper navigation
+  if (!state || !state.customerName || !state.signedAt) {
     return <Navigate to="/offers" replace />;
   }
 

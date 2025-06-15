@@ -11,6 +11,16 @@
   - All page content now renders between sticky header and footer for consistent navigation
 
 ### Changed
+- **SignPage UX Enhancement**: Removed redundant navigation button for signed offers
+  - Removed "Zurück zu den Angeboten" button from signed offers on SignPage  
+  - Signed offers now show only the offer details and PDF without additional navigation
+  - Users can still navigate back using the VARM logo in header or browser controls
+  - Cleaner interface focusing on the signed offer content
+- **SuccessPage Security Enhancement**: Protected success page from direct URL access
+  - Enhanced validation to require both `customerName` and `signedAt` in navigation state
+  - Success page now only accessible after completing the signing process
+  - Direct URL access to `/success` redirects to offers page for security
+  - Ensures users cannot bookmark or share success page URLs inappropriately
 - **SuccessPage Navigation Enhancement**: Improved user experience by navigating back to signed offer instead of offers list
   - Updated SignPage to pass offer slug to SuccessPage navigation state
   - Modified SuccessPage to navigate back to specific signed offer (`/sign/{slug}`) instead of offers list
