@@ -7,23 +7,23 @@ describe('PDFViewer', () => {
     const testUrl = 'https://example.com/document.pdf';
     render(<PDFViewer url={testUrl} />);
     
-    expect(screen.getByText('Offer Document')).toBeInTheDocument();
-    expect(screen.getByTitle('Offer PDF')).toBeInTheDocument();
-    expect(screen.getByText('Download PDF')).toBeInTheDocument();
+    expect(screen.getByText('Angebotsdokument')).toBeInTheDocument();
+    expect(screen.getByTitle('Angebots-PDF')).toBeInTheDocument();
+    expect(screen.getByText('PDF herunterladen')).toBeInTheDocument();
   });
 
   it('shows fallback message for empty URL', () => {
     render(<PDFViewer url="" />);
     
-    expect(screen.getByText('Offer Document')).toBeInTheDocument();
-    expect(screen.getByText('Document not available')).toBeInTheDocument();
-    expect(screen.getByText('The document will be available after processing')).toBeInTheDocument();
+    expect(screen.getByText('Angebotsdokument')).toBeInTheDocument();
+    expect(screen.getByText('Dokument nicht verfügbar')).toBeInTheDocument();
+    expect(screen.getByText('Das Dokument wird nach der Verarbeitung verfügbar sein')).toBeInTheDocument();
   });
 
   it('shows fallback message for undefined URL', () => {
     render(<PDFViewer url={undefined as any} />);
     
-    expect(screen.getByText('Document not available')).toBeInTheDocument();
+    expect(screen.getByText('Dokument nicht verfügbar')).toBeInTheDocument();
   });
 
   it('applies custom className', () => {
@@ -35,6 +35,6 @@ describe('PDFViewer', () => {
   it('shows loading state initially', () => {
     render(<PDFViewer url="https://example.com/document.pdf" />);
     
-    expect(screen.getByText('Loading document...')).toBeInTheDocument();
+    expect(screen.getByText('Dokument wird geladen...')).toBeInTheDocument();
   });
 });

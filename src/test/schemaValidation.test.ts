@@ -178,7 +178,9 @@ describe('Schema Validation', () => {
       documentURL: '', // Should use empty string as fallback
       pdfUrl: '', // Should use empty string as fallback
       isSigned: false, // Should use fallback signed status
-      signedAt: undefined
+      signedAt: undefined,
+      notes: '',
+      projectAddress: ''
     });
   });
   

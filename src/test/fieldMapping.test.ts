@@ -50,7 +50,9 @@ describe('Airtable Field Mapping', () => {
       documentURL: 'https://example.com/doc.pdf',
       pdfUrl: 'https://example.com/doc.pdf',
       isSigned: false,
-      signedAt: undefined
+      signedAt: undefined,
+      notes: '',
+      projectAddress: ''
     });
   });
   
@@ -81,7 +83,9 @@ describe('Airtable Field Mapping', () => {
       documentURL: 'https://example.com/doc2.pdf',
       pdfUrl: 'https://example.com/doc2.pdf',
       isSigned: true,
-      signedAt: '2025-06-14T10:00:00Z'
+      signedAt: '2025-06-14T10:00:00Z',
+      notes: '',
+      projectAddress: ''
     });
   });
   
@@ -107,7 +111,9 @@ describe('Airtable Field Mapping', () => {
       documentURL: '',
       pdfUrl: '',
       isSigned: false,
-      signedAt: undefined
+      signedAt: undefined,
+      notes: '',
+      projectAddress: ''
     });
   });
 });

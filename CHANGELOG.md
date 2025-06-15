@@ -11,6 +11,20 @@
   - All page content now renders between sticky header and footer for consistent navigation
 
 ### Changed
+- **NotFoundPage German Translation**: Completed German localization for 404 error page
+  - Translated "404 - Page Not Found" to "404 - Seite nicht gefunden"
+  - Translated "The page you're looking for doesn't exist or has been moved" to "Die gesuchte Seite existiert nicht oder wurde verschoben"
+  - Translated "Where would you like to go?" to "Wohin möchten Sie gehen?"
+  - Translated "View All Offers" to "Alle Angebote anzeigen"
+  - Removed "Try Sample Offer" button as requested for cleaner interface
+  - Translated help text to "Falls Sie glauben, dass dies ein Fehler ist, kontaktieren Sie bitte den VARM Support"
+- **SignPage Error Messages German Translation**: Localized all error handling text
+  - Translated "Offer Not Found" title to "Angebot nicht gefunden"
+  - Translated "Offer not found. This link may be incorrect..." to "Angebot nicht gefunden. Dieser Link ist möglicherweise falsch..."
+  - Translated "Invalid offer link..." to "Der ungültige Angebot-Link. Die URL scheint unvollständig..."
+  - Translated "Unable to connect to the server..." to "Verbindung zum Server nicht möglich..."
+  - Translated generic not found message to complete German explanation
+  - Removed "Return to Offers" buttons from error messages for cleaner navigation flow
 - **SignPage UX Enhancement**: Removed redundant navigation button for signed offers
   - Removed "Zurück zu den Angeboten" button from signed offers on SignPage  
   - Signed offers now show only the offer details and PDF without additional navigation
