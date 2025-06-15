@@ -6,18 +6,19 @@ A production-grade React + TypeScript application for climate-tech offer signing
 
 - Real-time offer display with Airtable integration
 - Secure PDF viewing and signing
+- REST API through Firebase Cloud Functions
+- External integrations and webhook support
 - Mobile-responsive UI
 - Comprehensive logging and error handling
 - Firebase hosting and functions
 
 ## Environment Variables
 
-This project requires certain environment variables to function correctly:
+This project requires the following environment variable:
 
-- `VITE_AIRTABLE_BASE_ID`: Your Airtable base ID
-- `VITE_AIRTABLE_API_KEY`: Your Airtable API key
+- `VITE_API_BASE_URL`: URL to your Firebase Cloud Functions API
 
-For local development, copy the `.env.example` file to `.env` and fill in your values:
+For local development, copy the `.env.example` file to `.env` and fill in your value:
 
 ```bash
 cp .env.example .env
@@ -26,11 +27,21 @@ cp .env.example .env
 
 For deployment with GitHub Actions, set these as repository secrets in your GitHub repo settings.
 
-See [ENV_VARIABLES.md](ENV_VARIABLES.md) for more detailed information.
+See [ENV_VARIABLES.md](ENV_VARIABLES.md) for more detailed information on environment configuration.
+
+## API & Automation
+
+The platform now includes a REST API layer using Firebase Cloud Functions, which enables:
+
+- External integrations with tools like Make.com or Zapier
+- Webhook support for automating workflows when offers are signed
+- Server-side Airtable integration for improved security
+
+For detailed information on setting up webhooks and automation, see [AUTOMATION.md](AUTOMATION.md).
 
 ## Offer Management
 
-The platform uses Airtable as its backend database. The Offers page (/offers) displays all available offers with their details. When an offer is signed, the status is updated in Airtable in real-time.
+The platform uses Firebase Cloud Functions with Airtable as its backend database. The Offers page (/offers) displays all available offers with their details. When an offer is signed, the Cloud Functions API updates the status in Airtable in real-time.
 
 ## Firebase Cloud Functions
 

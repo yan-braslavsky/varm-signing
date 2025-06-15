@@ -13,8 +13,25 @@ jobs:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
         env:
-          VITE_AIRTABLE_BASE_ID: ${{ secrets.VITE_AIRTABLE_BASE_ID }}
-          VITE_AIRTABLE_API_KEY: ${{ secrets.VITE_AIRTABLE_API_KEY }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
+      # Deploy Cloud Functions first
+      - name: Deploy Cloud Functions
+        run: |
+          cd functions && npm ci && npm run build
+          cd ..
+          npx firebase-tools deploy --only functions --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      
+      # Configure Airtable credentials for Cloud Functions
+      - name: Configure Airtable credentials
+        run: |
+          npx firebase-tools functions:config:set airtable.base_id=${{ secrets.AIRTABLE_BASE_ID }} airtable.api_key=${{ secrets.AIRTABLE_API_KEY }} --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      
+      # Deploy hosting
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

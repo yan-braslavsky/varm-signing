@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from 'vitest';
-import { airtableService } from '../api/airtableService';
+import { airtableService } from './mocks/airtableService.mock';
 
 // Mock fetch globally
 vi.stubGlobal('fetch', vi.fn());

@@ -1,5 +1,5 @@
 /**
- * JSON Schema Type Definitions for Airtable Integration
+ * JSON Schema Type Definitions for Offers
  * 
  * This file provides TypeScript interfaces that match the JSON schema for offers.
  * These types are used for documentation and validation purposes.

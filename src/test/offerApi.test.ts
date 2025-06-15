@@ -1,76 +1,175 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { offerApi } from '../api/offerApi'
+import { mockRestApiService } from './mocks/restApiService.mock'
+
+// Fix duplicate mock declaration
+vi.mock('../api/restApiService', () => ({
+  restApiService: mockRestApiService
+}))
 
 describe('offerApi', () => {
   beforeEach(() => {
-    // Reset any state if needed
+    // Reset mocks before each test
+    vi.clearAllMocks()
   })
 
   it('should fetch an offer by slug', async () => {
-    // Note: This test might occasionally fail due to the 5% random error simulation
-    // In a real test environment, we would mock the API calls
-    const response = await offerApi.getOffer('offer001')
+    // Setup successful response
+    mockRestApiService.getOffer.mockResolvedValueOnce({
+      data: {
+        slug: 'offer001',
+        customerName: 'John Doe',
+        offerAmount: 3500,
+        documentURL: 'https://example.com/document.pdf',
+        pdfUrl: 'https://example.com/document.pdf',
+        isSigned: true,
+        signedAt: '2025-06-10T14:32:11Z'
+      },
+      status: 200
+    });
+
+    const response = await offerApi.getOffer('offer001');
     
-    // Either success or simulated network error
-    expect([200, 500]).toContain(response.status)
+    // Check the response
+    expect(response.status).toBe(200);
+    expect(response.data).toBeDefined();
+    expect(response.data?.slug).toBe('offer001');
+    expect(response.data?.customerName).toBe('John Doe');
+    expect(response.data?.offerAmount).toBe(3500);
+    expect(response.data?.isSigned).toBe(true);
     
-    if (response.status === 200) {
-      expect(response.data).toBeDefined()
-      expect(response.data?.slug).toBe('offer001')
-      expect(response.data?.customerName).toBe('John Doe')
-      expect(response.data?.offerAmount).toBe(3500)
-      expect(response.data?.isSigned).toBe(true)
-    }
-  }, 10000) // Increase timeout for network delays
+    // Verify the service was called correctly
+    expect(mockRestApiService.getOffer).toHaveBeenCalledWith('offer001');
+    expect(mockRestApiService.getOffer).toHaveBeenCalledTimes(1);
+  })
 
   it('should return 404 for non-existent offer', async () => {
-    const response = await offerApi.getOffer('non-existent-slug')
+    // Setup error response
+    mockRestApiService.getOffer.mockResolvedValueOnce({
+      error: 'This offer link is invalid or has expired',
+      status: 404
+    });
     
-    expect(response.status).toBe(404)
-    expect(response.error).toBe('This offer link is invalid or has expired')
-    expect(response.data).toBeUndefined()
-  }, 10000)
+    const response = await offerApi.getOffer('non-existent-slug');
+    
+    expect(response.status).toBe(404);
+    expect(response.error).toBe('This offer link is invalid or has expired');
+    expect(response.data).toBeUndefined();
+    
+    // Verify the service was called correctly
+    expect(mockRestApiService.getOffer).toHaveBeenCalledWith('non-existent-slug');
+    expect(mockRestApiService.getOffer).toHaveBeenCalledTimes(1);
+  })
 
   it('should sign an offer successfully', async () => {
-    // Note: This test might occasionally fail due to the 5% random error simulation
-    // Use offer004 or offer005 which are unsigned offers based on Airtable data
-    const response = await offerApi.signOffer('offer004')
+    const signedDate = '2025-06-15T10:30:00Z';
     
-    // Either success, simulated network error, or already signed
-    expect([200, 500, 409]).toContain(response.status)
+    // Setup successful response
+    mockRestApiService.signOffer.mockResolvedValueOnce({
+      data: {
+        slug: 'offer004',
+        customerName: 'Maria Garcia',
+        offerAmount: 3200,
+        documentURL: 'https://example.com/documents/offer004.pdf',
+        pdfUrl: 'https://example.com/documents/offer004.pdf',
+        isSigned: true,
+        signedAt: signedDate,
+        projectAddress: '321 Energy Lane, Frankfurt',
+        notes: 'Standard package with additional roof insulation'
+      },
+      status: 200
+    });
     
-    if (response.status === 200) {
-      expect(response.data).toBeDefined()
-      expect(response.data?.isSigned).toBe(true)
-      expect(response.data?.signedAt).toBeDefined()
-    } else if (response.status === 409) {
-      // If the offer is already signed, that's also a valid scenario
-      expect(response.error).toBe('Offer has already been signed')
-    }
-  }, 10000)
+    const response = await offerApi.signOffer('offer004');
+    
+    // Check the response
+    expect(response.status).toBe(200);
+    expect(response.data).toBeDefined();
+    expect(response.data?.isSigned).toBe(true);
+    expect(response.data?.signedAt).toBe(signedDate);
+    
+    // Verify the service was called correctly
+    expect(mockRestApiService.signOffer).toHaveBeenCalledWith('offer004', {});
+    expect(mockRestApiService.signOffer).toHaveBeenCalledTimes(1);
+  })
 
   it('should return all offers', async () => {
-    // Note: This test might occasionally fail due to the 5% random error simulation
-    const response = await offerApi.getAllOffers()
+    const sampleOffers = [
+      {
+        slug: 'offer001',
+        customerName: 'John Doe',
+        offerAmount: 3500,
+        documentURL: 'https://example.com/document1.pdf',
+        pdfUrl: 'https://example.com/document1.pdf',
+        isSigned: true,
+        signedAt: '2025-06-10T14:32:11Z'
+      },
+      {
+        slug: 'offer002',
+        customerName: 'Jane Smith',
+        offerAmount: 2800,
+        documentURL: 'https://example.com/document2.pdf',
+        pdfUrl: 'https://example.com/document2.pdf',
+        isSigned: true,
+        signedAt: '2025-06-11T09:15:00Z'
+      }
+    ];
     
-    // Either success or simulated network error
-    expect([200, 500]).toContain(response.status)
+    // Setup successful response
+    mockRestApiService.getAllOffers.mockResolvedValueOnce({
+      data: sampleOffers,
+      status: 200
+    });
     
-    if (response.status === 200) {
-      expect(response.data).toBeDefined()
-      expect(Array.isArray(response.data)).toBe(true)
-      expect(response.data!.length).toBeGreaterThan(0)
-    }
-  }, 10000)
+    const response = await offerApi.getAllOffers();
+    
+    // Check the response
+    expect(response.status).toBe(200);
+    expect(response.data).toBeDefined();
+    expect(Array.isArray(response.data)).toBe(true);
+    expect(response.data!.length).toBe(2);
+    expect(response.data![0].slug).toBe('offer001');
+    expect(response.data![1].slug).toBe('offer002');
+    
+    // Verify the service was called correctly
+    expect(mockRestApiService.getAllOffers).toHaveBeenCalledTimes(1);
+  })
 
   it('should handle already signed offers', async () => {
-    const response = await offerApi.signOffer('offer001')
+    // Setup error response for already signed offer
+    mockRestApiService.signOffer.mockResolvedValueOnce({
+      error: 'Offer has already been signed',
+      status: 409
+    });
     
-    // Could be 409 (already signed) or 500 (simulated error)
-    expect([409, 500]).toContain(response.status)
+    const response = await offerApi.signOffer('offer001');
     
-    if (response.status === 409) {
-      expect(response.error).toBe('Offer has already been signed')
-    }
-  }, 10000)
+    // Check the response
+    expect(response.status).toBe(409);
+    expect(response.error).toBe('Offer has already been signed');
+    expect(response.data).toBeUndefined();
+    
+    // Verify the service was called correctly
+    expect(mockRestApiService.signOffer).toHaveBeenCalledWith('offer001', {});
+    expect(mockRestApiService.signOffer).toHaveBeenCalledTimes(1);
+  })
+  
+  it('should handle network errors', async () => {
+    // Setup network error response
+    mockRestApiService.getOffer.mockResolvedValueOnce({
+      error: 'Network Error: Failed to connect to API',
+      status: 500
+    });
+    
+    const response = await offerApi.getOffer('offer003');
+    
+    // Check the response
+    expect(response.status).toBe(500);
+    expect(response.error).toBe('Network Error: Failed to connect to API');
+    expect(response.data).toBeUndefined();
+    
+    // Verify the service was called correctly
+    expect(mockRestApiService.getOffer).toHaveBeenCalledWith('offer003');
+    expect(mockRestApiService.getOffer).toHaveBeenCalledTimes(1);
+  })
 })
