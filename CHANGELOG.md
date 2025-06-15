@@ -11,17 +11,32 @@
   - All page content now renders between sticky header and footer for consistent navigation
 
 ### Changed
-- **Offer Card Layout**: Redesigned offer cards with improved German localization and better visual hierarchy
+- **Offer Card UI Layout Improvements**: Enhanced user interface with modern icon system and improved functionality
+  - **Icon System Upgrade**: Replaced all emojis with professional Lucide React icons for consistency
+    - Mail icon for email addresses
+    - Hash icon for slug/ID display (removed "Slug:" text as requested)
+    - MapPin icon for project addresses
+    - Euro icon for offer amounts
+    - FileCheck icon for notes/descriptions
+    - Clock icon for signed dates
+    - CheckCircle2/Clock3 icons for status badges (Signed/Pending)
+    - FileText icon for "View Offer" action button
+  - **Google Maps Integration**: Made project addresses clickable to open Google Maps in new tab
+    - Added `getGoogleMapsUrl()` helper function for proper URL encoding
+    - Replaced static address display with interactive button
+    - Fixed nested anchor tag issues with proper event handling
+  - **Conditional Content Display**: Implemented smart hiding of signed date line for unsigned offers
+    - Changed condition from `offer.signedAt` to `offer.isSigned && offer.signedAt`
+    - Only shows "Unterzeichnet am:" section when offer is actually signed
+  - **German Localization Maintained**: Kept all German text including "Unterzeichnet am:" and "Projektadresse:"
+- **Previous Layout Improvements**: Redesigned offer cards with improved German localization and better visual hierarchy
   - Restructured layout to match specified design with header, project info, offer info, and call-to-action sections
-  - Added German text labels: "🆔 Slug", "📍 Projektadresse", "💶 Festpreisangebot"
-  - Improved status indicators with distinct styling for signed (✅ Signed) vs pending (📋 Pending) offers
+  - Improved status indicators with distinct styling for signed vs pending offers
   - Enhanced typography with stronger font weights and better spacing
-  - Added emoji icons for better visual recognition of different sections
   - Improved date formatting using German locale (de-DE) for signed dates
   - **Integrated real project addresses from Airtable**: Now displays actual German addresses from the Address field
   - **Replaced static German text with dynamic Notes field**: Offer cards now display custom notes from Airtable, falling back to default German text when notes are unavailable
   - **Optimized slug display**: Put slug label and value on same line for better space utilization
-  - **Completed German localization**: Changed "Signed on:" to "Unterzeichnet am:" for full German UI
   - Extended Offer type and Airtable field mapping to support projectAddress and notes fields
   - Reduced card max-width and optimized padding for better mobile experience
   - Removed redundant page-specific headers and footers from individual pages

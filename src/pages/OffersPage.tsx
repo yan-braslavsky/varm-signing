@@ -2,7 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { offerApi } from '../api/offerApi';
 import type { Offer, ApiResponse } from '../types/offer.js';
-import { FileText, CheckCircle } from 'lucide-react';
+import { 
+  FileText, 
+  CheckCircle, 
+  Mail, 
+  Hash, 
+  MapPin, 
+  Euro, 
+  FileCheck, 
+  Clock, 
+  CheckCircle2, 
+  Clock3 
+} from 'lucide-react';
 import { Logger } from '../utils/logger';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { CardSkeleton } from '../components/LoadingSkeleton';
@@ -14,6 +25,12 @@ export const OffersPage: React.FC = () => {
 
   // Track retry attempts
   const [retryCounter, setRetryCounter] = useState<number>(0);
+
+  // Function to generate Google Maps URL from address
+  const getGoogleMapsUrl = (address: string) => {
+    const encodedAddress = encodeURIComponent(address);
+    return `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+  };
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -232,60 +249,84 @@ export const OffersPage: React.FC = () => {
                   </h3>
                   {offer.customerEmail && (
                     <div className="flex items-center text-sm text-gray-500">
-                      <span className="mr-1.5">📧</span>
+                      <Mail className="w-4 h-4 mr-1.5" />
                       <span>{offer.customerEmail}</span>
                     </div>
                   )}
                 </div>
                 {offer.isSigned ? (
-                  <span className="px-2.5 py-1 bg-green-100 text-green-700 font-semibold text-sm rounded-xl">
-                    ✅ Signed
+                  <span className="px-2.5 py-1 bg-green-100 text-green-700 font-semibold text-sm rounded-xl flex items-center">
+                    <CheckCircle2 className="w-4 h-4 mr-1" />
+                    Signed
                   </span>
                 ) : (
-                  <span className="px-2.5 py-1 bg-yellow-100 text-yellow-700 font-semibold text-sm rounded-xl">
-                    📋 Pending
+                  <span className="px-2.5 py-1 bg-yellow-100 text-yellow-700 font-semibold text-sm rounded-xl flex items-center">
+                    <Clock3 className="w-4 h-4 mr-1" />
+                    Pending
                   </span>
                 )}
               </div>
 
               {/* Project Info */}
               <div className="mb-5">
-                <div className="text-sm text-gray-600">
-                  🆔 Slug: <span className="font-medium text-gray-900">{offer.slug || 'Missing'}</span>
+                <div className="text-sm text-gray-600 flex items-center">
+                  <Hash className="w-4 h-4 mr-1" />
+                  <span className="font-medium text-gray-900">{offer.slug || 'Missing'}</span>
                 </div>
                 
                 {/* Project address from Airtable */}
                 <div className="mt-3">
-                  <div className="text-sm text-gray-600 mb-1">📍 Projektadresse:</div>
-                  <div className="font-medium">
-                    {offer.projectAddress || 'Adresse nicht verfügbar'}
+                  <div className="text-sm text-gray-600 mb-1 flex items-center">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    Projektadresse:
                   </div>
+                  {offer.projectAddress ? (
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.open(getGoogleMapsUrl(offer.projectAddress!), '_blank', 'noopener,noreferrer');
+                      }}
+                      className="font-medium text-blue-600 hover:text-blue-800 underline transition-colors text-left"
+                    >
+                      {offer.projectAddress}
+                    </button>
+                  ) : (
+                    <div className="font-medium text-gray-500">
+                      Adresse nicht verfügbar
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* Offer Info */}
               <div className="mb-4 p-3 bg-gray-50 rounded-xl">
-                <div className="text-sm text-gray-700 mb-1">💶 Festpreisangebot</div>
+                <div className="text-sm text-gray-700 mb-1 flex items-center">
+                  <Euro className="w-4 h-4 mr-1" />
+                  Festpreisangebot
+                </div>
                 <div className="text-2xl font-bold text-gray-900">
                   {formatAmount(offer.offerAmount)}
                 </div>
               </div>
 
               {/* Info Text from Airtable Notes */}
-              <div className="mb-3 text-sm text-gray-500">
-                📝 {offer.notes || 'Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an. Wenn alles passt, klicke auf „Angebot ansehen".'}
+              <div className="mb-3 text-sm text-gray-500 flex items-start">
+                <FileCheck className="w-4 h-4 mr-1 mt-0.5 flex-shrink-0" />
+                <span>{offer.notes || 'Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an. Wenn alles passt, klicke auf „Angebot ansehen".'}</span>
               </div>
 
-              {/* Signed At */}
-              {offer.signedAt && (
-                <div className="mb-4 text-sm text-gray-500">
-                  🕒 Unterzeichnet am: {new Date(offer.signedAt).toLocaleDateString('de-DE')}
+              {/* Signed At - only show if offer is signed */}
+              {offer.isSigned && offer.signedAt && (
+                <div className="mb-4 text-sm text-gray-500 flex items-center">
+                  <Clock className="w-4 h-4 mr-1" />
+                  Unterzeichnet am: {new Date(offer.signedAt).toLocaleDateString('de-DE')}
                 </div>
               )}
 
               {/* View Offer */}
               <div className="flex items-center font-semibold text-emerald-700 text-sm">
-                <span className="mr-1">📄</span>
+                <FileText className="w-4 h-4 mr-1" />
                 <span>View Offer</span>
               </div>
             </Link>
