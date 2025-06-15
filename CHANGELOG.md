@@ -3,6 +3,26 @@
 ## Unreleased - 2025-06-15
 
 ### Added
+- **Cloud Functions API Layer**: Implemented Firebase Cloud Functions as the REST API layer
+  - Created a modular Cloud Functions architecture with proper separation of concerns
+  - Added `restApiService.ts` for communicating with Cloud Functions API
+  - Implemented server-side Airtable integration to secure API keys
+  - Added support for environment variable `VITE_API_BASE_URL` to configure API endpoint
+  - Updated documentation for environment variables and deployment
+  - Extended package.json scripts for easier function development and deployment
+  - Added API key authentication for sensitive endpoints
+  - Enhanced error handling with standardized error responses and detailed logging
+  - Improved test coverage using proper mocking for API layers
+
+### Changed
+- **API Security Enhancement**: Moved Airtable interactions to server-side
+  - Refactored `offerApi.ts` to use either REST API or direct Airtable access
+  - API can now be used by external tools like Make.com or Zapier
+  - Improved data integrity with duplicated validation on both client and server sides
+  - Ensures proper error handling for already signed offers (409 status)
+  - Makes integration with automation tools more straightforward
+
+### Added
 - **Navigation Layout**: Implemented site-wide header and footer navigation
   - Added new `Header` component with VARM logo and navigation to offers page
   - Clicking VARM logo in header returns user to offers page from any location

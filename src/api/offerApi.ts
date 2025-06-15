@@ -1,13 +1,20 @@
+// filepath: /Users/yan.braslavsky/Documents/React Web Projects/varm-signing/src/api/offerApi.ts
 import type { Offer, ApiResponse, SignRequest } from '../types/offer.js';
-import { airtableService } from './airtableService';
+import { restApiService } from './restApiService';
 import { Logger } from '../utils/logger';
 
-// Using Airtable API implementation for production
+/**
+ * Offer API service
+ * Handles all offer-related API requests through Firebase Cloud Functions
+ */
 export const offerApi = {
   async getOffer(slug: string): Promise<ApiResponse<Offer>> {
-    Logger.info(`Fetching offer with slug: ${slug}`, { context: 'offerApi.getOffer' });
+    Logger.info(`Fetching offer with slug: ${slug}`, { 
+      context: 'offerApi.getOffer'
+    });
+    
     try {
-      const response = await airtableService.getOffer(slug);
+      const response = await restApiService.getOffer(slug);
       
       if (response.error) {
         Logger.error(`Failed to fetch offer: ${response.error}`, undefined, { 
@@ -35,7 +42,7 @@ export const offerApi = {
     });
     
     try {
-      const response = await airtableService.signOffer(slug);
+      const response = await restApiService.signOffer(slug, signRequest);
       
       if (response.error) {
         Logger.error(`Failed to sign offer: ${response.error}`, undefined, { 
@@ -58,10 +65,12 @@ export const offerApi = {
 
   // Get all available offers
   async getAllOffers(): Promise<ApiResponse<Offer[]>> {
-    Logger.info('Fetching all offers', { context: 'offerApi.getAllOffers' });
+    Logger.info('Fetching all offers', { 
+      context: 'offerApi.getAllOffers'
+    });
     
     try {
-      const response = await airtableService.getAllOffers();
+      const response = await restApiService.getAllOffers();
       
       if (response.error) {
         Logger.error(`Failed to fetch offers: ${response.error}`, undefined, { 
@@ -78,7 +87,7 @@ export const offerApi = {
         
         // Log as table for better visibility
         if (response.data && response.data.length > 0) {
-          const simplifiedOffers = response.data.map(o => ({
+          const simplifiedOffers = response.data.map((o: Offer) => ({
             slug: o.slug,
             customer: o.customerName,
             amount: o.offerAmount,
@@ -98,5 +107,5 @@ export const offerApi = {
   },
 };
 
-// Export the default API (using Airtable service)
+// Export the default API
 export default offerApi;
