@@ -198,16 +198,16 @@ export const OffersPage: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-            Digital Signing Platform
+            Digitale Unterzeichnungsplattform
           </h1>
           <p className="text-gray-600 mb-6">
-            Choose an offer to view and complete the digital signing process
+            Wählen Sie ein Angebot aus, um den digitalen Unterzeichnungsprozess abzuschließen
           </p>
           
           {/* Error Message Display */}
           {error && (
-            <ErrorMessage 
-              title="Error loading offers"
+            <ErrorMessage
+              title="Fehler beim Laden der Angebote"
               message={error}
               type="error"
               className="mt-4"
@@ -219,7 +219,7 @@ export const OffersPage: React.FC = () => {
           {!error && offers.length > 0 && (
             <div className="mt-4 bg-green-50 p-2 rounded-lg text-sm text-green-700 flex items-center justify-center">
               <CheckCircle className="w-4 h-4 mr-2" />
-              <span>Successfully loaded {offers.length} offers</span>
+              <span>Erfolgreich {offers.length} Angebote geladen</span>
             </div>
           )}
         </div>
@@ -229,9 +229,9 @@ export const OffersPage: React.FC = () => {
           {offers.length === 0 && !loading && !error ? (
             <div className="col-span-2 p-8 bg-white rounded-2xl shadow-md text-center">
               <FileText className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Offers Available</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Keine Angebote verfügbar</h3>
               <p className="text-gray-600">
-                There are currently no offers available in the system.
+                Derzeit sind keine Angebote im System verfügbar.
               </p>
             </div>
           ) : (
@@ -257,12 +257,12 @@ export const OffersPage: React.FC = () => {
                 {offer.isSigned ? (
                   <span className="px-2.5 py-1 bg-green-100 text-green-700 font-semibold text-sm rounded-xl flex items-center">
                     <CheckCircle2 className="w-4 h-4 mr-1" />
-                    Signed
+                    Unterzeichnet
                   </span>
                 ) : (
                   <span className="px-2.5 py-1 bg-yellow-100 text-yellow-700 font-semibold text-sm rounded-xl flex items-center">
                     <Clock3 className="w-4 h-4 mr-1" />
-                    Pending
+                    Ausstehend
                   </span>
                 )}
               </div>
@@ -271,7 +271,7 @@ export const OffersPage: React.FC = () => {
               <div className="mb-5">
                 <div className="text-sm text-gray-600 flex items-center">
                   <Hash className="w-4 h-4 mr-1" />
-                  <span className="font-medium text-gray-900">{offer.slug || 'Missing'}</span>
+                  <span className="font-medium text-gray-900">{offer.slug || 'Fehlt'}</span>
                 </div>
                 
                 {/* Project address from Airtable */}
@@ -327,7 +327,7 @@ export const OffersPage: React.FC = () => {
               {/* View Offer */}
               <div className="flex items-center font-semibold text-emerald-700 text-sm">
                 <FileText className="w-4 h-4 mr-1" />
-                <span>View Offer</span>
+                <span>Angebot ansehen</span>
               </div>
             </Link>
           )))}

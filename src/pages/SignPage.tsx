@@ -98,7 +98,7 @@ export const SignPage: React.FC = () => {
             context: 'SignPage.handleSign',
             data: { status: response.status }
           });
-          toast.error('This offer has already been signed');
+          toast.error('Dieses Angebot wurde bereits unterzeichnet');
           // Refresh the offer data
           await fetchOffer();
         } else {
@@ -116,7 +116,7 @@ export const SignPage: React.FC = () => {
             signedAt: response.data.signedAt 
           }
         });
-        toast.success('Offer signed successfully!');
+        toast.success('Angebot erfolgreich unterzeichnet!');
         // Navigate to success page with offer data
         navigate('/success', { 
           state: { 
@@ -128,7 +128,7 @@ export const SignPage: React.FC = () => {
       }
     } catch (err) {
       Logger.error('Exception in sign offer process', err as Error, { context: 'SignPage.handleSign' });
-      toast.error('Failed to sign offer. Please try again.');
+      toast.error('Fehler beim Unterzeichnen des Angebots. Bitte versuchen Sie es erneut.');
     } finally {
       setSigning(false);
     }
@@ -250,12 +250,12 @@ export const SignPage: React.FC = () => {
                   {offer.isSigned ? (
                     <span className="px-3 py-1.5 bg-green-100 text-green-700 font-semibold text-sm rounded-xl flex items-center">
                       <CheckCircle2 className="w-4 h-4 mr-1" />
-                      Signed
+                      Unterzeichnet
                     </span>
                   ) : (
                     <span className="px-3 py-1.5 bg-yellow-100 text-yellow-700 font-semibold text-sm rounded-xl flex items-center">
                       <Clock3 className="w-4 h-4 mr-1" />
-                      Pending
+                      Ausstehend
                     </span>
                   )}
                 </div>
@@ -265,7 +265,7 @@ export const SignPage: React.FC = () => {
               <div className="mb-4">
                 <div className="text-sm text-gray-600 flex items-center">
                   <Hash className="w-4 h-4 mr-1" />
-                  <span className="font-medium text-gray-900">{offer.slug || 'Missing'}</span>
+                  <span className="font-medium text-gray-900">{offer.slug || 'Fehlt'}</span>
                 </div>
               </div>
 
