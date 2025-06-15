@@ -11,28 +11,50 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm ci && npm run build
+      
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      # Install dependencies and build main app
+      - name: Install dependencies and build
+        run: npm ci && npm run build
         env:
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
           VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
-      # Deploy Cloud Functions first
-      - name: Deploy Cloud Functions
+
+      # Build Cloud Functions
+      - name: Build Cloud Functions
         run: |
-          cd functions && npm ci && npm run build
+          cd functions
+          npm ci
+          npm run build
           cd ..
-          npx firebase-tools deploy --only functions --token "$FIREBASE_TOKEN"
+
+      # Deploy Cloud Functions using Firebase GitHub Action
+      - name: Deploy Cloud Functions
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only functions
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: varm-55a88
       
       # Configure Airtable credentials for Cloud Functions
       - name: Configure Airtable credentials
-        run: |
-          npx firebase-tools functions:config:set airtable.base_id=${{ secrets.AIRTABLE_BASE_ID }} airtable.api_key=${{ secrets.AIRTABLE_API_KEY }} --token "$FIREBASE_TOKEN"
+        uses: w9jds/firebase-action@master
+        with:
+          args: functions:config:set airtable.base_id=${{ secrets.AIRTABLE_BASE_ID }} airtable.api_key=${{ secrets.AIRTABLE_API_KEY }}
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: varm-55a88
       
       # Deploy hosting
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VARM_55A88 }}

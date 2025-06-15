@@ -6,6 +6,13 @@
 - **Cloud Functions API Layer**: Deployed Firebase Cloud Functions as the REST API layer
   - Created a modular Cloud Functions architecture with proper separation of concerns
   - Configured Firebase Functions with Airtable API credentials and secure API key
+
+### Fixed
+- **CI/CD Pipeline**: Improved GitHub Actions workflow for Firebase deployment
+  - Fixed authentication issues with Firebase CLI in GitHub Actions
+  - Replaced direct npx commands with the recommended w9jds/firebase-action
+  - Streamlined the workflow by removing duplicate setup steps
+  - Added proper Node.js setup with caching for faster builds
   - Successfully deployed Cloud Functions to Firebase with Node.js 20
   - Added `restApiService.ts` for communicating with Cloud Functions API
   - Implemented server-side Airtable integration to secure API keys
