@@ -37,6 +37,25 @@ export const api = onRequest({
   cors: true,
   secrets: [API_KEY, AIRTABLE_BASE_ID, AIRTABLE_API_KEY, API_BASEURL],
 }, (request, response) => {
+  // Handle CORS preflight (OPTIONS) requests for all endpoints
+  if (request.method === 'OPTIONS') {
+    // Always set CORS headers for preflight
+    response.set({
+      'Access-Control-Allow-Origin': request.headers.origin || '*',
+      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+      'Access-Control-Allow-Headers': request.headers['access-control-request-headers'] || 'Content-Type,Authorization,x-api-key',
+      'Access-Control-Max-Age': '3600',
+    });
+    response.status(204).send('');
+    return;
+  }
+
+  // Always set CORS headers for all responses
+  response.set({
+    'Access-Control-Allow-Origin': request.headers.origin || '*',
+    'Vary': 'Origin',
+  });
+
   const path = request.path || '';
   
   logger.info(`API request: ${request.method} ${path}`, { 
