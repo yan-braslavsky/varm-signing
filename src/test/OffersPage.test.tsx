@@ -13,9 +13,9 @@ describe('OffersPage', () => {
     
     // Wait for the content to load (after the loading skeleton)
     await waitFor(() => {
-      expect(screen.getByText('Digital Signing Platform')).toBeInTheDocument()
+      expect(screen.getByText('Digitale Unterzeichnungsplattform')).toBeInTheDocument()
     }, { timeout: 3000 })
-    
-    expect(screen.getByText('Choose an offer to view and complete the digital signing process')).toBeInTheDocument()
+
+    expect(screen.getByText('W\xE4hlen Sie ein Angebot aus, um den digitalen Unterzeichnungsprozess abzuschlie\xDFen')).toBeInTheDocument()
   })
 })
