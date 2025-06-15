@@ -11,6 +11,24 @@
   - All page content now renders between sticky header and footer for consistent navigation
 
 ### Changed
+- **SignPage Final UI Polish**: Completed German localization and improved signed offer presentation
+  - **German Title Translation**: Changed page title from "Sign and Accept Offer" to "Angebot unterzeichnen und annehmen"
+  - **Conditional Header Layout**: 
+    - Unsigned offers: Show blue instruction box with German guidance
+    - Signed offers: Show prominent green success header with celebration message
+  - **Streamlined Signed Offer Experience**:
+    - Moved signed status to top of page as primary focus
+    - Removed duplicate signed date from offer details card
+    - Simplified button to just "Zurück zu den Angeboten" for signed offers
+    - Consolidated all signed offer messaging in header section
+  - **Unified German Messaging**: All signed offer text now in German
+    - "Angebot bereits unterzeichnet" (Offer already signed)
+    - "Vielen Dank für Ihre Unterschrift! Das Angebot wurde erfolgreich abgesendet." (Thank you for your signature! The offer has been successfully submitted.)
+    - Proper German date formatting with "Unterzeichnet am:" label
+- **Header Navigation Simplified**: Removed "Offers" button from navigation bar
+  - Navigation now focuses on VARM logo click for offers page access
+  - Cleaner, more minimal header design
+  - Removed unused React Router location dependency
 - **SignPage User Experience Enhancement**: Improved signing workflow with German localization and better signed offer handling
   - **Added German Instructions**: Added prominent blue information box at top with complete German instructions
     - "Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an."

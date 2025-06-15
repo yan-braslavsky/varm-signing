@@ -1,10 +1,8 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Leaf } from 'lucide-react';
 
 export const Header: React.FC = () => {
-  const location = useLocation();
-
   return (
     <header className="hdr-container bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="hdr-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,16 +22,7 @@ export const Header: React.FC = () => {
 
           {/* Navigation */}
           <nav className="hdr-nav flex items-center space-x-6">
-            <Link
-              to="/offers"
-              className={`hdr-nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                location.pathname === '/offers'
-                  ? 'bg-green-100 text-green-700'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              Offers
-            </Link>
+            {/* Navigation items removed - logo click provides navigation to offers */}
           </nav>
         </div>
       </div>

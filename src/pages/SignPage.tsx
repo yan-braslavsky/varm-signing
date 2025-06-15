@@ -203,21 +203,37 @@ export const SignPage: React.FC = () => {
   return (
     <div className="bg-gray-50 px-3 sm:px-6 py-6">
       <div className="max-w-4xl mx-auto">
-        {/* Page Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Sign and Accept Offer</h1>
-          <div className="max-w-2xl mx-auto bg-blue-50 rounded-xl p-6 mb-6">
-            <p className="text-gray-800 text-base leading-relaxed mb-3">
-              Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an.
-            </p>
-            <p className="text-gray-800 text-base leading-relaxed mb-3">
-              Hast du Fragen? Ruf uns gerne an oder schreib uns.
-            </p>
-            <p className="text-gray-800 text-base leading-relaxed font-medium">
-              Wenn alles passt, klicke auf „Angebot annehmen & absenden".
-            </p>
+        {/* Page Header - Show instructions only for unsigned offers */}
+        {!offer.isSigned ? (
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Angebot unterzeichnen und annehmen</h1>
+            <div className="max-w-2xl mx-auto bg-blue-50 rounded-xl p-6 mb-6">
+              <p className="text-gray-800 text-base leading-relaxed mb-3">
+                Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an.
+              </p>
+              <p className="text-gray-800 text-base leading-relaxed mb-3">
+                Hast du Fragen? Ruf uns gerne an oder schreib uns.
+              </p>
+              <p className="text-gray-800 text-base leading-relaxed font-medium">
+                Wenn alles passt, klicke auf „Angebot annehmen & absenden".
+              </p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="text-center mb-8">
+            <div className="max-w-2xl mx-auto bg-green-50 rounded-xl p-6 mb-6">
+              <CheckCircle2 className="w-16 h-16 mx-auto text-green-500 mb-4" />
+              <h1 className="text-2xl font-bold text-green-800 mb-3">Angebot bereits unterzeichnet</h1>
+              <p className="text-green-700 text-lg mb-4">
+                Vielen Dank für Ihre Unterschrift! Das Angebot wurde erfolgreich abgesendet.
+              </p>
+              <div className="text-base text-green-600 flex items-center justify-center">
+                <Clock className="w-4 h-4 mr-1.5" />
+                <span>Unterzeichnet am: {new Date(offer.signedAt!).toLocaleDateString('de-DE')}</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Offer Details */}
@@ -283,14 +299,6 @@ export const SignPage: React.FC = () => {
                   {formatAmount(offer.offerAmount)}
                 </div>
               </div>
-
-              {/* Signed Date - only show if offer is signed */}
-              {offer.isSigned && offer.signedAt && (
-                <div className="mb-4 text-sm text-gray-500 flex items-center p-3 bg-green-50 rounded-lg">
-                  <Clock className="w-4 h-4 mr-1.5" />
-                  <span>Unterzeichnet am: {new Date(offer.signedAt).toLocaleDateString('de-DE')}</span>
-                </div>
-              )}
             </Card>
 
             {/* Sign Button or Signed Status */}
@@ -304,20 +312,9 @@ export const SignPage: React.FC = () => {
                 {signing ? 'Angebot wird abgesendet...' : 'Angebot annehmen & absenden'}
               </PrimaryButton>
             ) : (
-              <div className="bg-green-50 rounded-2xl p-6 text-center">
-                <CheckCircle2 className="w-16 h-16 mx-auto text-green-500 mb-4" />
-                <h3 className="text-xl font-bold text-green-800 mb-2">Angebot bereits unterzeichnet</h3>
-                <p className="text-green-700 mb-4">
-                  Vielen Dank für Ihre Unterschrift! Das Angebot wurde erfolgreich abgesendet.
-                </p>
-                <div className="text-sm text-green-600 mb-4 flex items-center justify-center">
-                  <Clock className="w-4 h-4 mr-1.5" />
-                  <span>Unterzeichnet am: {new Date(offer.signedAt!).toLocaleDateString('de-DE')}</span>
-                </div>
-                <PrimaryButton onClick={() => navigate('/offers')} className="w-full">
-                  Zurück zu den Angeboten
-                </PrimaryButton>
-              </div>
+              <PrimaryButton onClick={() => navigate('/offers')} className="w-full">
+                Zurück zu den Angeboten
+              </PrimaryButton>
             )}
           </div>
 
