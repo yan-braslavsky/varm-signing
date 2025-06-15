@@ -25,6 +25,11 @@ const handleError = (
   details?: any,
   loggingMetadata?: Record<string, any>
 ): void => {
+  // Add more robust error logging for local dev
+  if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
+    console.error('[handleError]', { statusCode, message, details, ...loggingMetadata });
+  }
   logger.error(message, { 
     statusCode,
     details,
