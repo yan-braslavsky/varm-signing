@@ -33,7 +33,7 @@
     "deploy:all": "npm run build:prod && cd functions && npm run build && cd .. && firebase deploy",
     "functions:build": "cd functions && npm run build",
     "functions:dev": "cd functions && npm run build:watch",
-    "emulators": "firebase emulators:start",
+    "emulators": "npm run dev & firebase emulators:start --only auth,functions,firestore,database,hosting,storage,extensions",
     "emulators:functions": "firebase emulators:start --only functions",
     "test:build": "npm run build && npm run preview",
     "clean": "rm -rf dist && rm -rf functions/lib && rm -rf coverage",

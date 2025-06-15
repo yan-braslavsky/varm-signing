@@ -13,6 +13,8 @@ const API_CONFIG = {
   baseUrl: import.meta.env.VITE_API_BASE_URL,
 };
 
+const API_KEY = import.meta.env.VITE_API_KEY;
+
 /**
  * REST API Service for Firebase Cloud Functions
  */
@@ -26,7 +28,11 @@ export const restApiService = {
         context: 'restApiService.getOffer'
       });
 
-      const response = await fetch(`${API_CONFIG.baseUrl}/offer/${slug}`);
+      const response = await fetch(`${API_CONFIG.baseUrl}/offer/${slug}`, {
+        headers: {
+          'x-api-key': API_KEY
+        }
+      });
       const result = await response.json();
       
       if (!response.ok) {
@@ -67,7 +73,8 @@ export const restApiService = {
       const response = await fetch(`${API_CONFIG.baseUrl}/offer/${slug}/sign`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-api-key': API_KEY
         },
         body: JSON.stringify(signRequest)
       });
@@ -106,7 +113,11 @@ export const restApiService = {
     try {
       Logger.info('Fetching all offers from API', { context: 'restApiService.getAllOffers' });
 
-      const response = await fetch(`${API_CONFIG.baseUrl}/offers`);
+      const response = await fetch(`${API_CONFIG.baseUrl}/offers`, {
+        headers: {
+          'x-api-key': API_KEY
+        }
+      });
       const result = await response.json();
       
       if (!response.ok) {
