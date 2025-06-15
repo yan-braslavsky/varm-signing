@@ -11,6 +11,33 @@
   - All page content now renders between sticky header and footer for consistent navigation
 
 ### Changed
+- **SignPage Enhanced Details**: Incorporated comprehensive offer details from OffersPage cards into SignPage
+  - **Unified Design System**: Applied same professional Lucide React icons used in OffersPage
+    - Mail icon for customer email display
+    - Hash icon for offer ID/slug
+    - MapPin icon for project address with Google Maps integration
+    - Euro icon for offer amount display
+    - FileCheck icon for notes/description section
+    - Clock icon for signed date display
+    - CheckCircle2/Clock3 icons for status badges
+  - **Comprehensive Information Display**: Added all offer details to sign page layout
+    - Customer name and email with professional formatting
+    - Offer status badge (Signed/Pending) with color coding
+    - Offer ID/slug display for reference
+    - Clickable project address that opens Google Maps in new tab
+    - Prominent offer amount display with German currency formatting
+    - Custom notes/description from Airtable data
+    - Conditional signed date display (only shown for completed signatures)
+  - **Improved Layout Structure**: Enhanced two-column layout with offer details and PDF viewer
+    - Left column: Complete offer information card with all details
+    - Right column: PDF document viewer for contract review
+    - Responsive design that stacks on mobile devices
+    - Consistent spacing and typography throughout
+  - **Enhanced User Experience**: Improved signing workflow with complete context
+    - All relevant offer information visible during signing process
+    - Clear visual hierarchy with status indicators
+    - Google Maps integration for project location verification
+    - German localization maintained throughout
 - **Offer Card UI Layout Improvements**: Enhanced user interface with modern icon system and improved functionality
   - **Icon System Upgrade**: Replaced all emojis with professional Lucide React icons for consistency
     - Mail icon for email addresses

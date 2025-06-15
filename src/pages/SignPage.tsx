@@ -8,6 +8,16 @@ import { Card } from '../components/Card';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { PDFViewer } from '../components/PDFViewer';
 import { Logger } from '../utils/logger';
+import { 
+  Mail, 
+  Hash, 
+  MapPin, 
+  Euro, 
+  FileCheck, 
+  Clock, 
+  CheckCircle2, 
+  Clock3 
+} from 'lucide-react';
 
 export const SignPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -128,6 +138,20 @@ export const SignPage: React.FC = () => {
     fetchOffer();
   }, [slug]);
 
+  // Function to generate Google Maps URL from address
+  const getGoogleMapsUrl = (address: string) => {
+    const encodedAddress = encodeURIComponent(address);
+    return `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+  };
+
+  const formatAmount = (amount: number) => {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
   if (loading) {
     return (
       <div className="bg-white px-3 sm:px-6 py-6">
@@ -178,27 +202,92 @@ export const SignPage: React.FC = () => {
   }
 
   return (
-    <div className="bg-white px-3 sm:px-6 py-6">
+    <div className="bg-gray-50 px-3 sm:px-6 py-6">
       <div className="max-w-4xl mx-auto">
         {/* Page Header */}
         <div className="text-center mb-8">
-          <h1 className="text-xl font-semibold text-gray-900 mb-4">Sign and Accept</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Sign and Accept Offer</h1>
+          <p className="text-gray-600">Review the offer details and complete the digital signing process</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Offer Details */}
           <div className="order-2 lg:order-1">
             <Card className="mb-6">
-              <div className="text-center">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{offer.customerName}</h3>
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
-                  {new Intl.NumberFormat('de-DE', {
-                    style: 'currency',
-                    currency: 'EUR',
-                    minimumFractionDigits: 2,
-                  }).format(offer.offerAmount)}
+              {/* Header with Customer Name and Status */}
+              <div className="flex justify-between items-start mb-6">
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{offer.customerName}</h3>
+                  {offer.customerEmail && (
+                    <div className="flex items-center text-sm text-gray-500 mb-3">
+                      <Mail className="w-4 h-4 mr-1.5" />
+                      <span>{offer.customerEmail}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="ml-4">
+                  {offer.isSigned ? (
+                    <span className="px-3 py-1.5 bg-green-100 text-green-700 font-semibold text-sm rounded-xl flex items-center">
+                      <CheckCircle2 className="w-4 h-4 mr-1" />
+                      Signed
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1.5 bg-yellow-100 text-yellow-700 font-semibold text-sm rounded-xl flex items-center">
+                      <Clock3 className="w-4 h-4 mr-1" />
+                      Pending
+                    </span>
+                  )}
                 </div>
               </div>
+
+              {/* Offer ID */}
+              <div className="mb-4">
+                <div className="text-sm text-gray-600 flex items-center">
+                  <Hash className="w-4 h-4 mr-1" />
+                  <span className="font-medium text-gray-900">{offer.slug || 'Missing'}</span>
+                </div>
+              </div>
+
+              {/* Project Address */}
+              {offer.projectAddress && (
+                <div className="mb-4">
+                  <div className="text-sm text-gray-600 mb-1 flex items-center">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    Projektadresse:
+                  </div>
+                  <button
+                    onClick={() => window.open(getGoogleMapsUrl(offer.projectAddress!), '_blank', 'noopener,noreferrer')}
+                    className="font-medium text-blue-600 hover:text-blue-800 underline transition-colors text-left"
+                  >
+                    {offer.projectAddress}
+                  </button>
+                </div>
+              )}
+
+              {/* Offer Amount */}
+              <div className="mb-4 p-4 bg-gray-50 rounded-xl">
+                <div className="text-sm text-gray-700 mb-1 flex items-center">
+                  <Euro className="w-4 h-4 mr-1" />
+                  Festpreisangebot
+                </div>
+                <div className="text-3xl font-bold text-gray-900">
+                  {formatAmount(offer.offerAmount)}
+                </div>
+              </div>
+
+              {/* Notes/Description */}
+              <div className="mb-4 text-sm text-gray-600 flex items-start">
+                <FileCheck className="w-4 h-4 mr-1.5 mt-0.5 flex-shrink-0" />
+                <span>{offer.notes || 'Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an. Wenn alles passt, klicke auf „Angebot annehmen".'}</span>
+              </div>
+
+              {/* Signed Date - only show if offer is signed */}
+              {offer.isSigned && offer.signedAt && (
+                <div className="mb-4 text-sm text-gray-500 flex items-center p-3 bg-green-50 rounded-lg">
+                  <Clock className="w-4 h-4 mr-1.5" />
+                  <span>Unterzeichnet am: {new Date(offer.signedAt).toLocaleDateString('de-DE')}</span>
+                </div>
+              )}
             </Card>
 
             {/* Sign Button */}
@@ -207,17 +296,18 @@ export const SignPage: React.FC = () => {
                 onClick={handleSign}
                 isLoading={signing}
                 disabled={signing}
+                className="w-full"
               >
-                Sign and Accept
+                {signing ? 'Signing...' : 'Sign and Accept Offer'}
               </PrimaryButton>
             ) : (
               <div className="text-center">
-                <div className="bg-green-50 rounded-2xl p-4 mb-4">
-                  <div className="text-green-600 text-4xl mb-2">✅</div>
-                  <p className="text-green-800 font-semibold">Already Signed</p>
+                <div className="bg-green-50 rounded-2xl p-6 mb-4">
+                  <CheckCircle2 className="w-12 h-12 mx-auto text-green-500 mb-3" />
+                  <p className="text-green-800 font-semibold text-lg mb-1">Already Signed</p>
                   <p className="text-green-600 text-sm">Thank you for your signature!</p>
                 </div>
-                <PrimaryButton onClick={() => navigate('/offers')}>
+                <PrimaryButton onClick={() => navigate('/offers')} className="w-full">
                   Back to Offers
                 </PrimaryButton>
               </div>
@@ -229,9 +319,9 @@ export const SignPage: React.FC = () => {
             {(offer.documentURL || offer.pdfUrl) ? (
               <PDFViewer url={offer.documentURL || offer.pdfUrl} />
             ) : (
-              <div className="bg-white rounded-xl shadow-md p-4">
-                <h2 className="text-lg font-semibold mb-3 text-gray-900">Offer Document</h2>
-                <div className="bg-gray-50 rounded-md p-8 text-center">
+              <div className="bg-white rounded-xl shadow-md p-6">
+                <h2 className="text-lg font-semibold mb-4 text-gray-900">Offer Document</h2>
+                <div className="bg-gray-50 rounded-lg p-8 text-center">
                   <div className="text-gray-400 text-4xl mb-3">📄</div>
                   <p className="text-gray-600 font-medium">Document not available</p>
                   <p className="text-gray-500 text-sm mt-1">
