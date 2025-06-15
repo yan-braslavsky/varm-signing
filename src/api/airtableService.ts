@@ -103,6 +103,9 @@ const transformAirtableRecord = (record: any): Offer => {
   // Get project address
   const projectAddress = getFieldValue(fieldMap.projectAddress) || '';
   
+  // Get notes
+  const notes = getFieldValue(fieldMap.notes) || '';
+  
   return {
     slug: slug,
     customerName: customerName,
@@ -113,6 +116,7 @@ const transformAirtableRecord = (record: any): Offer => {
     isSigned: isSigned,
     signedAt: signedAt === null ? undefined : signedAt,
     projectAddress: projectAddress,
+    notes: notes,
   };
 };
 

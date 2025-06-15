@@ -8,6 +8,7 @@ export interface Offer {
   isSigned: boolean;
   signedAt?: string;
   projectAddress?: string; // Added for project address
+  notes?: string; // Added for notes from Airtable
 }
 
 export interface ApiResponse<T> {

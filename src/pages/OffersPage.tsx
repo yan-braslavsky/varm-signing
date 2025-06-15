@@ -250,8 +250,9 @@ export const OffersPage: React.FC = () => {
 
               {/* Project Info */}
               <div className="mb-5">
-                <div className="text-sm text-gray-600 mb-1">🆔 Slug:</div>
-                <div className="font-medium">{offer.slug || 'Missing'}</div>
+                <div className="text-sm text-gray-600">
+                  🆔 Slug: <span className="font-medium text-gray-900">{offer.slug || 'Missing'}</span>
+                </div>
                 
                 {/* Project address from Airtable */}
                 <div className="mt-3">
@@ -270,16 +271,15 @@ export const OffersPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Info Text */}
+              {/* Info Text from Airtable Notes */}
               <div className="mb-3 text-sm text-gray-500">
-                📝 Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an.  
-                Wenn alles passt, klicke auf „Angebot ansehen".
+                📝 {offer.notes || 'Bitte schau dir in Ruhe alle Details zu deinem Dämmprojekt an. Wenn alles passt, klicke auf „Angebot ansehen".'}
               </div>
 
               {/* Signed At */}
               {offer.signedAt && (
                 <div className="mb-4 text-sm text-gray-500">
-                  🕒 Signed on: {new Date(offer.signedAt).toLocaleDateString('de-DE')}
+                  🕒 Unterzeichnet am: {new Date(offer.signedAt).toLocaleDateString('de-DE')}
                 </div>
               )}
 

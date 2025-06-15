@@ -79,5 +79,6 @@ export const FIELD_VARIATIONS = {
   pdfUrl: ['Document URL', 'documentURL', 'DocumentURL', 'pdfUrl', 'PDF URL'],
   isSigned: ['Signed', 'signed', 'isSigned', 'Is Signed'],
   signedAt: ['Signed At', 'signedAt', 'Sign Date', 'Date Signed'],
-  projectAddress: ['Address', 'address', 'projectAddress', 'Project Address', 'Projektadresse']
+  projectAddress: ['Address', 'address', 'projectAddress', 'Project Address', 'Projektadresse'],
+  notes: ['Notes', 'notes', 'Note', 'note', 'Description', 'description', 'Comment', 'comment']
 };

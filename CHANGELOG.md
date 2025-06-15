@@ -13,13 +13,16 @@
 ### Changed
 - **Offer Card Layout**: Redesigned offer cards with improved German localization and better visual hierarchy
   - Restructured layout to match specified design with header, project info, offer info, and call-to-action sections
-  - Added German text labels: "🆔 Slug", "📍 Projektadresse", "💶 Festpreisangebot", "📝 Bitte schau dir in Ruhe alle Details..."
+  - Added German text labels: "🆔 Slug", "📍 Projektadresse", "💶 Festpreisangebot"
   - Improved status indicators with distinct styling for signed (✅ Signed) vs pending (📋 Pending) offers
   - Enhanced typography with stronger font weights and better spacing
   - Added emoji icons for better visual recognition of different sections
   - Improved date formatting using German locale (de-DE) for signed dates
   - **Integrated real project addresses from Airtable**: Now displays actual German addresses from the Address field
-  - Extended Offer type and Airtable field mapping to support projectAddress field
+  - **Replaced static German text with dynamic Notes field**: Offer cards now display custom notes from Airtable, falling back to default German text when notes are unavailable
+  - **Optimized slug display**: Put slug label and value on same line for better space utilization
+  - **Completed German localization**: Changed "Signed on:" to "Unterzeichnet am:" for full German UI
+  - Extended Offer type and Airtable field mapping to support projectAddress and notes fields
   - Reduced card max-width and optimized padding for better mobile experience
   - Removed redundant page-specific headers and footers from individual pages
   - Updated all "Back to VARM" buttons to navigate to offers page using React Router
