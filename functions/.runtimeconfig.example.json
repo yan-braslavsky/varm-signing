@@ -1,0 +1,10 @@
+{
+  "airtable": {
+    "base_id": "your_airtable_base_id",
+    "api_key": "your_airtable_api_key"
+  },
+  "api": {
+    "key": "your_secure_api_key",
+    "baseurl": "https://us-central1-your-project-id.cloudfunctions.net"
+  }
+}
