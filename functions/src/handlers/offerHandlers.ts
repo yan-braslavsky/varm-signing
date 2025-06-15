@@ -48,42 +48,46 @@ const handleError = (
  */
 export const getOffer = async (request: Request, response: Response): Promise<void> => {
   const startTime = Date.now();
-  
   try {
-    const slug = request.params[0]?.replace('/offer/', '');
-    
+    // Extract slug from path using regex for better accuracy
+    const match = request.path.match(/\/offer\/?([^/]+)/);
+    const slug = match ? match[1] : undefined;
+
     if (!slug) {
-      handleError(response, 400, "Missing slug parameter", undefined, { 
-        function: "getOffer", 
-        path: request.path 
-      });
+      logger.error('❌ [getOffer] Missing slug parameter', { function: 'getOffer', path: request.path });
+      handleError(response, 400, 'Missing slug parameter', undefined, { function: 'getOffer', path: request.path });
       return;
     }
 
-    logger.info(`Fetching offer: ${slug}`, { 
-      function: "getOffer",
-      slug
-    });
-    
+    logger.info(`🔍 [getOffer] Fetching offer: ${slug}`, { function: 'getOffer', slug });
+
+    // Log the filter formula for Airtable
+    const filterFormula = `{Slug} = "${slug}"`;
+    logger.debug(`🧪 [getOffer] Using filterFormula: ${filterFormula}`);
+
     const result = await airtableService.getOffer(slug);
-    
+
     // Log request completion
-    logger.info(`Completed getOffer for slug ${slug}`, {
-      function: "getOffer",
-      slug,
-      status: result.status,
-      durationMs: Date.now() - startTime
-    });
-    
+    if (result.status === 200) {
+      logger.info(`✅ [getOffer] Completed getOffer for slug ${slug}`, {
+        function: 'getOffer', slug, status: result.status, durationMs: Date.now() - startTime
+      });
+    } else {
+      logger.warn(`⚠️ [getOffer] Offer not found or error for slug ${slug}`, {
+        function: 'getOffer', slug, status: result.status, error: result.error, durationMs: Date.now() - startTime
+      });
+    }
+
     response.status(result.status).json(result);
   } catch (error) {
     const errorObj = error as Error;
+    logger.error(`🔥 [getOffer] Internal server error: ${errorObj.message}`, { function: 'getOffer', path: request.path, stack: errorObj.stack });
     handleError(
-      response, 
-      500, 
-      "Internal server error while fetching offer", 
+      response,
+      500,
+      'Internal server error while fetching offer',
       { message: errorObj.message, stack: errorObj.stack },
-      { function: "getOffer", path: request.path }
+      { function: 'getOffer', path: request.path }
     );
   }
 };
