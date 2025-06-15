@@ -1,9 +1,20 @@
 # Changelog
 
-## Unreleased - 2025-06-14
+## Unreleased - 2025-06-15
 
 ### Added
-- **PDF Document Viewer**: Implemented PDF viewer component for offer documents
+- **Navigation Layout**: Implemented site-wide header and footer navigation
+  - Added new `Header` component with VARM logo and navigation to offers page
+  - Clicking VARM logo in header returns user to offers page from any location
+  - Added new `Footer` component with branding, quick links, and legal information
+  - Updated `App.tsx` RootLayout to include header and footer on all pages
+  - All page content now renders between sticky header and footer for consistent navigation
+  - Removed redundant page-specific headers and footers from individual pages
+  - Updated all "Back to VARM" buttons to navigate to offers page using React Router
+
+## 2025-06-14
+
+### Added
   - Added new `PDFViewer` component with iframe-based PDF display
   - Mobile-friendly design with responsive layout for desktop and mobile
   - Fallback handling for missing or invalid PDF URLs with user-friendly error messages

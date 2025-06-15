@@ -11,12 +11,20 @@ import { SignPage } from './pages/SignPage';
 import { SuccessPage } from './pages/SuccessPage';
 import { OffersPage } from './pages/OffersPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 
 // Root layout component that includes common UI elements
 function RootLayout() {
   return (
-    <div className="App">
-      <Outlet /> {/* This is where nested routes will render */}
+    <div className="App min-h-screen flex flex-col">
+      <Header />
+      
+      <main className="flex-1">
+        <Outlet /> {/* This is where nested routes will render */}
+      </main>
+      
+      <Footer />
       
       {/* Global toast notifications */}
       <Toaster

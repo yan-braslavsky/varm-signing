@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, Navigate } from 'react-router-dom';
+import { useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { PrimaryButton } from '../components/PrimaryButton';
 
 interface SuccessPageState {
@@ -9,6 +9,7 @@ interface SuccessPageState {
 
 export const SuccessPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const state = location.state as SuccessPageState;
 
   // Redirect to home if no state is provided
@@ -32,13 +33,8 @@ export const SuccessPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white px-3 sm:px-6 py-4 sm:py-6">
+    <div className="bg-white px-3 sm:px-6 py-6">
       <div className="max-w-md mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-8">VARM</h1>
-        </div>
-
         {/* Success Content */}
         <div className="text-center mb-8">
           {/* Checkmark Icon */}
@@ -72,8 +68,8 @@ export const SuccessPage: React.FC = () => {
         </div>
 
         {/* Back Button */}
-        <PrimaryButton onClick={() => window.location.href = '/'}>
-          Back to VARM
+        <PrimaryButton onClick={() => navigate('/offers')}>
+          Back to Offers
         </PrimaryButton>
       </div>
     </div>

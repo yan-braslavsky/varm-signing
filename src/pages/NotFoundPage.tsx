@@ -4,7 +4,7 @@ import { FileX, Home } from 'lucide-react';
 
 export const NotFoundPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white py-12 px-3 sm:py-16 sm:px-6">
+    <div className="bg-white py-12 px-3 sm:py-16 sm:px-6">
       <div className="max-w-md mx-auto text-center">
         {/* 404 Icon */}
         <div className="mb-8 animate-bounce-in">
