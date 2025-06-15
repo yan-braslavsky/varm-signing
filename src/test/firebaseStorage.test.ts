@@ -36,7 +36,7 @@ describe('Firebase Storage Utilities', () => {
 
     it('should handle complex file paths with folders', () => {
       const gsUrl = 'gs://my-bucket/documents/subfolder/test file.pdf';
-      const expected = 'https://firebasestorage.googleapis.com/v0/b/my-bucket/o/documents%2Fsubfolder%2Ftest%2520file.pdf?alt=media';
+      const expected = 'https://firebasestorage.googleapis.com/v0/b/my-bucket/o/documents%2Fsubfolder%2Ftest%20file.pdf?alt=media';
       
       expect(convertGsUrlToDownloadUrl(gsUrl)).toBe(expected);
     });

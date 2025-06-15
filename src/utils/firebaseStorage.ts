@@ -27,7 +27,9 @@ export const convertGsUrlToDownloadUrl = (gsUrl: string): string => {
     // Format: gs://bucket-name/path/to/file.pdf
     const url = new URL(gsUrl);
     const bucket = url.hostname;
-    const path = url.pathname.substring(1); // Remove leading slash
+    // URL.pathname is already percent-encoded. Decode before re-encoding to
+    // avoid double encoding characters like spaces.
+    const path = decodeURIComponent(url.pathname).substring(1); // Remove leading slash
     
     // Check for malformed URLs (empty bucket or path)
     if (!bucket || bucket.trim() === '') {
