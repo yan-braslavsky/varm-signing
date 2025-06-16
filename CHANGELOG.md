@@ -12,7 +12,8 @@
 - **Cloud Functions API Layer**: Deployed Firebase Cloud Functions as the REST API layer
   - Created a modular Cloud Functions architecture with proper separation of concerns
   - Configured Firebase Functions with Airtable API credentials and secure API key
-- **CORS Support**: Added dedicated offers function with explicit CORS headers
+- **CORS Support**: Added dedicated functions with explicit CORS headers
+  - Created separate `offers` and `offer` endpoints with proper CORS configurations
   - Implemented proper CORS preflight handling for OPTIONS requests
   - Added detailed header configuration for cross-origin requests
   - Enhanced logging for better request tracking
