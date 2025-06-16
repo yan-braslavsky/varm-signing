@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased - 2025-06-15
+## Unreleased - 2025-06-16
+
+### Changed
+- **CI/CD Pipeline**: Removed Functions deployment from CI workflow
+  - Removed dedicated Firebase Functions deployment workflow
+  - Updated Firebase Hosting deployment workflow to exclude Functions
+  - Configured workflow to use FirebaseExtended/action-hosting-deploy action for Hosting deployments only
 
 ### Added
 - **Cloud Functions API Layer**: Deployed Firebase Cloud Functions as the REST API layer
@@ -14,7 +20,6 @@
   - Replaced direct npx commands with the recommended w9jds/firebase-action
   - Streamlined the workflow by removing duplicate setup steps
   - Using Service Account authentication with GCP_SA_KEY for more secure deployment
-  - Updated deployment to properly handle both Firebase Hosting and Cloud Functions
   - Fixed Firebase Extensions permission error by specifying exact deployment targets
   - Added non-interactive flag to avoid prompts during automated deployment
   - Successfully deployed Cloud Functions to Firebase with Node.js 20

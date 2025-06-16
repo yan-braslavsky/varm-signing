@@ -18,28 +18,11 @@ jobs:
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
           VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
 
-      # Build Cloud Functions
-      - name: Build Cloud Functions
-        run: |
-          cd functions
-          npm ci
-          npm run build
-          cd ..
-
-      # Deploy Cloud Functions 
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
+      # Deploy only hosting
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          args: deploy --only functions:default,hosting --non-interactive
-        env:
-          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VARM_55A88 }}
-          PROJECT_ID: varm-55a88
-      
-      # Configure Airtable credentials for Cloud Functions
-      - name: Configure Airtable credentials
-        uses: w9jds/firebase-action@master
-        with:
-          args: functions:config:set airtable.base_id=${{ secrets.AIRTABLE_BASE_ID }} airtable.api_key=${{ secrets.AIRTABLE_API_KEY }}
-        env:
-          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VARM_55A88 }}
-          PROJECT_ID: varm-55a88
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VARM_55A88 }}
+          channelId: live
+          projectId: varm-55a88
