@@ -46,8 +46,35 @@ firebase login:ci
    - Name: `FIREBASE_TOKEN`
    - Value: Paste the token from the `firebase login:ci` command
 
-## 3. Verify Workflow Setup
+## 3. Deployment Configuration
 
-The Firebase Functions deployment workflow will now run automatically when changes are pushed to the `functions/` directory on the main branch.
+The workflow is configured to deploy both Firebase Functions and Hosting when changes are pushed to the main branch.
+
+### Deployment Specifics
+
+The deployment command in the workflow uses specific flags to ensure smooth CI/CD:
+
+```yaml
+- name: Deploy to Firebase
+  uses: w9jds/firebase-action@master
+  with:
+    args: deploy --only functions:default,hosting --non-interactive
+  env:
+    GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_VARM_55A88 }}
+    PROJECT_ID: varm-55a88
+```
+
+- `--only functions:default,hosting`: Deploys only the default functions codebase and hosting, avoiding deployment of other Firebase services
+- `--non-interactive`: Ensures the deployment doesn't wait for any user input, which is essential for CI environments
+
+### Handling Permission Issues
+
+If you encounter permission errors during deployment:
+
+1. **Firebase Extensions Error**: If you see errors related to Firebase Extensions permissions, it's often because the service account doesn't have the right permissions for this service. Our current workflow avoids this by only deploying the services we need.
+
+2. **Function Deployment Error**: If Cloud Functions deployment fails with permission errors, verify that your service account has all the required roles mentioned above.
+
+3. **IAM Propagation**: After adding IAM roles, changes can take up to 5-10 minutes to propagate in Google Cloud.
 
 You can also manually trigger the workflow from the "Actions" tab in your GitHub repository.

@@ -15,6 +15,8 @@
   - Streamlined the workflow by removing duplicate setup steps
   - Using Service Account authentication with GCP_SA_KEY for more secure deployment
   - Updated deployment to properly handle both Firebase Hosting and Cloud Functions
+  - Fixed Firebase Extensions permission error by specifying exact deployment targets
+  - Added non-interactive flag to avoid prompts during automated deployment
   - Successfully deployed Cloud Functions to Firebase with Node.js 20
   - Added `restApiService.ts` for communicating with Cloud Functions API
   - Implemented server-side Airtable integration to secure API keys
