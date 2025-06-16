@@ -19,6 +19,10 @@
   - Enhanced logging for better request tracking
 
 ### Fixed
+- **CORS Issues**: Fixed CORS errors that were blocking API requests from the frontend
+  - Added proper CORS headers to all API endpoints
+  - Created dedicated Cloud Functions for direct endpoint access
+  - Fixed path handling for offer details endpoint
 - **CI/CD Pipeline**: Improved GitHub Actions workflow for Firebase deployment
   - Fixed authentication issues with Firebase CLI in GitHub Actions
   - Simplified workflow based on working PR deployment pattern

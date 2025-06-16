@@ -49,9 +49,22 @@ const handleError = (
 export const getOffer = async (request: Request, response: Response): Promise<void> => {
   const startTime = Date.now();
   try {
-    // Extract slug from path using regex for better accuracy
-    const match = request.path.match(/\/offer\/?([^/]+)/);
-    const slug = match ? match[1] : undefined;
+    // First check if slug is already available in request.params from our dedicated function
+    let slug = request.params?.slug;
+    
+    // If not found in params, try to extract it from the path (for API function)
+    if (!slug) {
+      // Extract slug from path using regex for better accuracy
+      const match = request.path.match(/\/offer\/?([^/]+)/);
+      slug = match ? match[1] : undefined;
+    }
+
+    // Log the path and slug for debugging
+    logger.debug(`🔍 [getOffer] Path: ${request.path}, Extracted slug: ${slug}`, { 
+      function: 'getOffer', 
+      path: request.path,
+      params: JSON.stringify(request.params || {})
+    });
 
     if (!slug) {
       logger.error('❌ [getOffer] Missing slug parameter', { function: 'getOffer', path: request.path });

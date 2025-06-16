@@ -103,7 +103,7 @@ export const offer = onRequest({
     'Access-Control-Allow-Headers': 'Content-Type,Authorization,x-api-key',
   });
 
-  // Extract the slug from path (remove "/offer/" from the beginning)
+  // Get the path and extract the slug
   const path = request.path || '';
   logger.info(`Offer function called directly: ${request.method} ${path}`, { 
     origin: request.headers.origin,
@@ -112,11 +112,27 @@ export const offer = onRequest({
     ip: request.ip
   });
   
+  // Extract the slug from the request path
+  // For the URL format: https://us-central1-varm-55a88.cloudfunctions.net/offer/offer003
+  // We need to extract "offer003" as the slug
+  const pathSegments = path.split('/').filter(segment => segment.length > 0);
+  const slug = pathSegments.length > 0 ? pathSegments[0] : '';
+  
+  logger.info(`Processing offer with slug: "${slug}"`, { 
+    context: 'offer',
+    path,
+    slug
+  });
+
+  // Check if we're handling a sign request or a get request
   if (path.endsWith('/sign') && request.method === 'POST') {
     // Handle sign offer request
     signOffer(request, response);
-  } else if (request.method === 'GET') {
-    // Handle get offer request
+  } else if (request.method === 'GET' && slug) {
+    // Update the request object with the extracted slug
+    request.params = { ...request.params, slug };
+    
+    // Handle get offer request with the extracted slug
     verifyApiKey(request, response, () => {
       getOffer(request, response);
     });
