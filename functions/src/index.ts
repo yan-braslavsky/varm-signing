@@ -113,25 +113,50 @@ export const offer = onRequest({
   });
   
   // Extract the slug from the request path
-  // For the URL format: https://us-central1-varm-55a88.cloudfunctions.net/offer/offer003
-  // We need to extract "offer003" as the slug
+  // For URLs like:
+  // - https://us-central1-varm-55a88.cloudfunctions.net/offer/offer003
+  // - https://us-central1-varm-55a88.cloudfunctions.net/offer/offer003/sign
   const pathSegments = path.split('/').filter(segment => segment.length > 0);
-  const slug = pathSegments.length > 0 ? pathSegments[0] : '';
   
-  logger.info(`Processing offer with slug: "${slug}"`, { 
+  let slug = '';
+  let isSignRequest = false;
+  
+  // Check if this is a sign request
+  if (pathSegments.length >= 2 && pathSegments[1] === 'sign') {
+    slug = pathSegments[0];
+    isSignRequest = true;
+  } else if (pathSegments.length > 0) {
+    slug = pathSegments[0];
+  }
+  
+  logger.info(`Processing offer: slug="${slug}", isSignRequest=${isSignRequest}`, { 
     context: 'offer',
     path,
-    slug
+    slug,
+    pathSegments,
+    isSignRequest
   });
 
+  // Update the request object with the extracted slug and additional metadata
+  if (isSignRequest) {
+    // Format for signOffer handler which expects params[0] to be '/offer/slug/sign'
+    request.params = { 
+      ...request.params, 
+      0: `/offer/${slug}/sign`,
+      slug
+    };
+  } else {
+    request.params = { 
+      ...request.params, 
+      slug
+    };
+  }
+  
   // Check if we're handling a sign request or a get request
-  if (path.endsWith('/sign') && request.method === 'POST') {
+  if (isSignRequest && request.method === 'POST') {
     // Handle sign offer request
     signOffer(request, response);
   } else if (request.method === 'GET' && slug) {
-    // Update the request object with the extracted slug
-    request.params = { ...request.params, slug };
-    
     // Handle get offer request with the extracted slug
     verifyApiKey(request, response, () => {
       getOffer(request, response);

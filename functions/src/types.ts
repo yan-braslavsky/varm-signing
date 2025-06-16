@@ -19,6 +19,7 @@ export interface ApiResponse<T> {
   data?: T;
   error?: string;
   status: number;
+  details?: Record<string, any>; // Optional additional error details
 }
 
 export interface SignRequest {

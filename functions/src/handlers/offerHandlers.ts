@@ -120,8 +120,21 @@ export const signOffer = async (request: Request, response: Response): Promise<v
       return;
     }
 
-    const pathParts = request.params[0]?.split('/');
-    const slug = pathParts?.[1]; // /offer/:slug/sign
+    // First check if slug is directly provided in request.params (from our dedicated function)
+    let slug = request.params?.slug;
+    
+    // If not found, try to extract it from the path parameter format (for API function)
+    if (!slug && request.params[0]) {
+      const pathParts = request.params[0]?.split('/');
+      slug = pathParts?.[1]; // /offer/:slug/sign
+    }
+    
+    // Log the extraction attempt for debugging
+    logger.debug(`🔍 [signOffer] Path extraction: params=${JSON.stringify(request.params)}, slug=${slug}`, {
+      function: "signOffer",
+      path: request.path,
+      params: JSON.stringify(request.params || {})
+    });
     
     if (!slug) {
       handleError(response, 400, "Missing slug parameter", undefined, { 

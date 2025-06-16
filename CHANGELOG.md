@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased - 2025-06-16
+## v1.0.0 - 2025-06-16
 
 ### Changed
 - **CI/CD Pipeline**: Removed Functions deployment from CI workflow
@@ -23,6 +23,18 @@
   - Added proper CORS headers to all API endpoints
   - Created dedicated Cloud Functions for direct endpoint access
   - Fixed path handling for offer details endpoint
+  - Made sign endpoint work properly with parameter extraction
+- **Signing Flow**: Fixed 422 errors when trying to sign offers
+  - Improved slug field detection with multiple variation attempts
+  - Added more robust error handling for Airtable record lookups
+  - Enhanced logging for better debugging of signing process
+  - Fixed issue with unknown field names in Airtable updates
+  - Simplified update payload to use only verified field names
+  - Fixed issue with sign offer endpoint routing
+  - Resolved date format issue by implementing a more robust update strategy
+  - Added fallback mechanism for date field updates to handle incompatible field types
+  - Added detailed error parsing for better diagnostics of Airtable API responses
+  - Implemented TypeScript fixes to prevent compile errors during deployment
 - **CI/CD Pipeline**: Improved GitHub Actions workflow for Firebase deployment
   - Fixed authentication issues with Firebase CLI in GitHub Actions
   - Simplified workflow based on working PR deployment pattern

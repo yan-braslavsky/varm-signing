@@ -258,10 +258,15 @@ export class AirtableService {
       const offerResponse = await this.getOffer(slug);
       
       if (offerResponse.error || !offerResponse.data) {
+        logger.warn(`Cannot sign offer - getOffer failed: ${offerResponse.error}`, { 
+          slug, 
+          status: offerResponse.status 
+        });
         return offerResponse;
       }
       
       if (offerResponse.data.isSigned) {
+        logger.info(`Offer ${slug} already signed at ${offerResponse.data.signedAt}`);
         return {
           error: 'This offer has already been signed',
           status: 409,
@@ -269,27 +274,50 @@ export class AirtableService {
       }
       
       // Find the record ID for the offer
+      logger.info(`Finding Airtable record ID for slug: ${slug}`);
       const recordId = await this.findRecordId(slug);
       
       if (!recordId) {
+        logger.error(`Could not find record ID for slug: ${slug}`);
         return {
           error: 'Could not find record for this offer',
-          status: 404,
+          status: 422, // Using 422 to match the error we're seeing
+          details: { slug }
         };
       }
       
-      const now = new Date().toISOString();
       const url = `${AIRTABLE_CONFIG.baseUrl}/${AIRTABLE_CONFIG.baseId}/${AIRTABLE_CONFIG.tableName}/${recordId}`;
       
       // Update the record in Airtable
+      // First, let's check what field names are being used in the offer we just retrieved
+      const fieldsInUse = offerResponse.data ? Object.keys(offerResponse.data) : [];
+      
+      // Log the available fields to help diagnose
+      logger.info(`Fields available in offer: ${JSON.stringify(fieldsInUse)}`, { 
+        slug, 
+        recordId
+      });
+      
+      // Get the current date in a format that Airtable will accept
+      // Airtable requires dates to be in YYYY-MM-DD format for Date fields
+      const currentDate = new Date();
+      const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+      
+      // Create a minimal update payload using just the known-good field name
+      // We'll try first with both fields, but have a fallback if this fails
       const updateData = {
         fields: {
+          // Use only the basic field name that we know exists based on the error message
           'Signed': true,
-          'Signed At': now
-        }
+          'Signed At': formattedDate
+        } as Record<string, any>
       };
       
-      logger.debug(`Updating offer with slug: ${slug}`, updateData);
+      logger.info(`Updating offer with slug: ${slug}, record ID: ${recordId}`, { 
+        slug, 
+        recordId,
+        updateData: JSON.stringify(updateData)
+      });
       
       const response = await fetch(url, {
         method: 'PATCH',
@@ -299,15 +327,71 @@ export class AirtableService {
 
       if (!response.ok) {
         const errorText = await response.text();
-        logger.error(`Airtable API error ${response.status}:`, errorText);
+        
+        // Parse the error if possible to get more details
+        let errorDetails = {};
+        try {
+          errorDetails = JSON.parse(errorText);
+        } catch (e) {
+          // If error text isn't JSON, use as is
+          errorDetails = { message: errorText };
+        }
+        
+        logger.error(`Airtable API error ${response.status}:`, {
+          slug,
+          recordId,
+          status: response.status,
+          error: errorDetails,
+          requestBody: JSON.stringify(updateData)
+        });
+        
+        // If the error is about the date field, try with a simplified update
+        if (response.status === 422 && (errorText.includes('Signed At') || errorText.includes('UNKNOWN_FIELD_NAME'))) {
+          logger.info('Attempting update with only the Signed field (no date)');
+          
+          // Try again with just the boolean field
+          const simpleUpdateData = { fields: { 'Signed': true } };
+          
+          try {
+            const simpleResponse = await fetch(url, {
+              method: 'PATCH',
+              headers: getAirtableHeaders(),
+              body: JSON.stringify(simpleUpdateData),
+            });
+            
+            if (simpleResponse.ok) {
+              const simpleData = await simpleResponse.json();
+              logger.info('Successfully updated offer with simplified payload');
+              
+              // Use the already parsed data
+              const updatedOffer = transformAirtableRecord(simpleData);
+              return { data: updatedOffer, status: 200 };
+            } else {
+              const simpleErrorText = await simpleResponse.text();
+              logger.error('Even simplified update failed:', { error: simpleErrorText });
+            }
+          } catch (e) {
+            logger.error('Error during simplified update attempt:', e);
+          }
+        }
+        
         return {
           error: `Failed to sign offer: ${response.status}`,
           status: response.status,
+          details: { errorDetails, requestBody: updateData }
         };
       }
+      
+      // Parse and log the successful response
+      const responseData = await response.json();
+      logger.info(`Successfully signed offer in Airtable:`, { 
+        slug,
+        recordId,
+        responseFields: JSON.stringify(responseData.fields || {})
+      });
 
-      const data = await response.json();
-      const updatedOffer = transformAirtableRecord(data);
+      // Use the already parsed data
+      const updatedOffer = transformAirtableRecord(responseData);
       
       return {
         data: updatedOffer,
@@ -328,44 +412,76 @@ export class AirtableService {
   private async findRecordId(slug: string): Promise<string | null> {
     try {
       const url = `${AIRTABLE_CONFIG.baseUrl}/${AIRTABLE_CONFIG.baseId}/${AIRTABLE_CONFIG.tableName}`;
-      const filterFormula = `{Slug} = "${slug}"`;
       
-      const response = await fetch(`${url}?filterByFormula=${encodeURIComponent(filterFormula)}`, {
+      // Try multiple field variations for the slug
+      for (const slugField of FIELD_VARIATIONS.slug) {
+        // Try each possible slug field name in the filter
+        const filterFormula = `{${slugField}} = "${slug}"`;
+        logger.debug(`Trying to find record with filter: ${filterFormula}`, { slug, slugField });
+        
+        try {
+          const response = await fetch(`${url}?filterByFormula=${encodeURIComponent(filterFormula)}`, {
+            headers: getAirtableHeaders(),
+          });
+  
+          if (response.ok) {
+            const data = await response.json();
+            
+            if (data.records && data.records.length > 0) {
+              logger.info(`Found record ID for slug "${slug}" using field "${slugField}": ${data.records[0].id}`);
+              return data.records[0].id;
+            }
+          } else {
+            logger.warn(`Filter query failed for field "${slugField}": ${response.status}`);
+          }
+        } catch (err) {
+          logger.warn(`Error querying with field "${slugField}":`, err);
+          // Continue to the next field variation
+        }
+      }
+      
+      // If all specific filters fail, try fetching all records
+      logger.info(`No record found with specific filters, trying general approach for slug: ${slug}`);
+      const allResponse = await fetch(url, {
         headers: getAirtableHeaders(),
       });
-
-      if (!response.ok) {
-        // Try alternative approach if filter fails
-        const allResponse = await fetch(url, {
-          headers: getAirtableHeaders(),
-        });
-        
-        if (!allResponse.ok) return null;
-        
-        const allData = await allResponse.json();
-        
-        const record = allData.records.find((record: AirtableRecord) => {
-          const fields = record.fields || {};
-          
-          for (const slugField of FIELD_VARIATIONS.slug) {
-            if (fields[slugField] === slug) {
-              return true;
-            }
-          }
-          
-          return false;
-        });
-        
-        return record ? record.id : null;
-      }
-
-      const data = await response.json();
       
-      if (!data.records || data.records.length === 0) {
+      if (!allResponse.ok) {
+        logger.error(`Failed to fetch all records: ${allResponse.status}`);
         return null;
       }
-
-      return data.records[0].id;
+      
+      const allData = await allResponse.json();
+      logger.debug(`Retrieved ${allData.records?.length || 0} records, looking for slug: ${slug}`);
+      
+      // Log a sample of the data structure to help debug field names
+      if (allData.records && allData.records.length > 0) {
+        logger.debug('Sample record fields:', { 
+          sampleFields: allData.records[0].fields,
+          fieldKeys: Object.keys(allData.records[0].fields || {})
+        });
+      }
+      
+      const record = allData.records?.find((record: AirtableRecord) => {
+        const fields = record.fields || {};
+        
+        for (const slugField of FIELD_VARIATIONS.slug) {
+          if (fields[slugField] === slug) {
+            logger.info(`Found matching record with field "${slugField}" = "${slug}"`);
+            return true;
+          }
+        }
+        
+        return false;
+      });
+      
+      if (record) {
+        logger.info(`Found record ID using full scan: ${record.id}`);
+        return record.id;
+      } else {
+        logger.warn(`No record found with slug "${slug}" in any field variation`);
+        return null;
+      }
     } catch (error) {
       logger.error('Error finding record ID:', error);
       return null;
