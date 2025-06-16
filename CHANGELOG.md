@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+- **Cloud Functions Cleanup**: Removed unused endpoints
+  - Removed `ping` function as it's no longer needed for health checks
+  - Removed `api` function since it was redundant with dedicated endpoints
+  - Simplified the Cloud Functions codebase by focusing on core functionality
+
 ## v1.1.0 - 2025-06-16
 
 ### Added
