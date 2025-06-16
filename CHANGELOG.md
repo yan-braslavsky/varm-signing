@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.1.0 - 2025-06-16
+
+### Added
+- **Concurrency Control**: Added protection against race conditions in signing process
+  - Implemented optimistic concurrency control with check-and-set pattern
+  - Added retry mechanism with exponential backoff for concurrent modifications
+  - Enhanced error handling to provide better feedback on concurrency issues
+  - Created dedicated concurrencyService for reusable concurrency utilities
+
 ## v1.0.0 - 2025-06-16
 
 ### Changed

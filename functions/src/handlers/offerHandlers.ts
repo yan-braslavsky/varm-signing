@@ -154,7 +154,11 @@ export const signOffer = async (request: Request, response: Response): Promise<v
       hasSignature: !!signRequest.signature
     });
     
-    const result = await airtableService.signOffer(slug);
+    // Import the concurrency service for race condition handling
+    const { signOfferWithConcurrencyControl } = await import('../services/concurrencyService.js');
+    
+    // Use the concurrency-controlled version to handle potential race conditions
+    const result = await signOfferWithConcurrencyControl(slug);
     
     // Log request completion
     logger.info(`Completed signOffer for slug ${slug}`, {
