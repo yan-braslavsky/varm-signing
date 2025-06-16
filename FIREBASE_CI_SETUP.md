@@ -2,11 +2,9 @@
 
 To enable automated deployment of Firebase Functions via GitHub Actions, follow these steps:
 
-> **Note:** The current CI setup uses the `--no-script` flag to skip predeploy scripts due to an issue with ESLint configuration. If you fix the ESLint issue, you can remove this flag for proper linting during deployment.
-
 ## Authentication Method
 
-The CI/CD pipeline uses the Firebase service account key for authentication, which is more secure than using a Firebase CI token.
+The CI/CD pipeline uses the Firebase service account key for authentication via the `w9jds/firebase-action` GitHub Action. This method provides secure deployment of both Firebase Hosting and Cloud Functions.
 
 ### Using Service Account Key (Recommended)
 
