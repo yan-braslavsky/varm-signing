@@ -29,6 +29,53 @@ export const ping = onRequest({
   });
 });
 
+// Dedicated offers function with proper CORS handling
+export const offers = onRequest({
+  timeoutSeconds: 60,
+  region: "us-central1",
+  memory: "256MiB",
+  cors: true,
+  secrets: [API_KEY, AIRTABLE_BASE_ID, AIRTABLE_API_KEY, API_BASEURL],
+}, (request, response) => {
+  // Handle CORS preflight requests
+  if (request.method === 'OPTIONS') {
+    response.set({
+      'Access-Control-Allow-Origin': request.headers.origin || '*',
+      'Access-Control-Allow-Methods': 'GET,OPTIONS',
+      'Access-Control-Allow-Headers': request.headers['access-control-request-headers'] || 'Content-Type,Authorization,x-api-key',
+      'Access-Control-Max-Age': '3600',
+    });
+    response.status(204).send('');
+    return;
+  }
+
+  // Set CORS headers for normal requests
+  response.set({
+    'Access-Control-Allow-Origin': request.headers.origin || '*',
+    'Vary': 'Origin',
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization,x-api-key',
+  });
+
+  logger.info("Offers function called directly", { 
+    origin: request.headers.origin,
+    method: request.method,
+    ip: request.ip
+  });
+  
+  if (request.method === 'GET') {
+    // Verify API key and get all offers
+    verifyApiKey(request, response, () => {
+      getAllOffers(request, response);
+    });
+  } else {
+    response.status(405).json({
+      error: "Method not allowed",
+      status: 405,
+      method: request.method
+    });
+  }
+});
+
 // API function for offer access
 export const api = onRequest({
   timeoutSeconds: 60,
